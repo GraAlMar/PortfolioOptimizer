@@ -1,12 +1,8 @@
 package com.example.myproj4.controllers;
 
-import com.example.myproj4.constants.APIKey;
 import com.example.myproj4.models.Asset;
-import com.example.myproj4.models.AssetAccAPI;
-import com.example.myproj4.services.FinAPIService;
+import com.example.myproj4.services.AlphaVantageApiService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -14,17 +10,17 @@ import reactor.core.publisher.Mono;
 
 public class FinancialDataController {
 
-    private final FinAPIService finAPIService;
+    private final AlphaVantageApiService alphaVantageApiService;
 
-    public FinancialDataController(FinAPIService finAPIService) {
-        this.finAPIService = finAPIService;
+    public FinancialDataController(AlphaVantageApiService alphaVantageApiService) {
+        this.alphaVantageApiService = alphaVantageApiService;
     }
 
     @GetMapping("/explore")
     public Asset getFinancialData(@RequestParam String searchString) {
-        var fetched = finAPIService.getAssetAccAPIToStore(searchString);
-        finAPIService.save(fetched);
-        return finAPIService.getFinancialData(searchString);
+        var fetched = alphaVantageApiService.getAssetAccAPIToStore(searchString);
+        alphaVantageApiService.save(fetched);
+        return alphaVantageApiService.getFinancialData(searchString);
     }
     /*
     @GetMapping("/explore")

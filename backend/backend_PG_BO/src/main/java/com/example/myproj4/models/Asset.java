@@ -11,22 +11,23 @@ public class Asset {
     @GeneratedValue
     private Long id;
     @Column
-    private String name;
+    private String abbreviation;
     @Column
     private String type;
     @Column
-    private String wkpnr;
+    private String name;
+
     @Column
     private Double beta;
     @Column
     private Double sharperatio;
 
 
-    public Asset(Long id, String name, String type, String wkpnr, Double beta, Double sharperatio) {
+    public Asset(Long id, String abbreviation, String type, String name, Double beta, Double sharperatio) {
         this.id = id;
-        this.name = name;
+        this.abbreviation = abbreviation;
         this.type = type;
-        this.wkpnr = wkpnr;
+        this.name = name;
         this.beta = beta;
         this.sharperatio = sharperatio;
     }
@@ -43,16 +44,16 @@ public class Asset {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getAbbreviation() {
+        return abbreviation;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getWkpnr() {
-        return wkpnr;
+    public String getName() {
+        return name;
     }
 
     public Double getBeta() {
@@ -67,24 +68,24 @@ public class Asset {
     public String toString() {
         return "Asset{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
                 ", type='" + type + '\'' +
-                ", wkpnr='" + wkpnr + '\'' +
+                ", name='" + name + '\'' +
                 ", beta=" + beta +
                 ", sharperatio=" + sharperatio +
                 '}';
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAbbreviation(String name) {
+        this.abbreviation = name;
     }
 
     public void setType(String type) {
         this.type = type;
     }
 
-    public void setWkpnr(String wkpnr) {
-        this.wkpnr = wkpnr;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setBeta(Double beta) {

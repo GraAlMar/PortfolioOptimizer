@@ -4,11 +4,9 @@ import AssetResultList from "../components/AssetResultList";
 import { Asset } from "../data/AssetType";
 
 const fetchAssets = (stateSetter: React.Dispatch<React.SetStateAction<Asset[]>>, queryParams: string): Promise<void> => {
-    let urlPart;
-    if (queryParams !== "") {
-        urlPart = "?searchString=" + queryParams;
-    }
-    return fetch("http://localhost:8080/api/explore" + urlPart, {}).then(res => res.json().then(data => stateSetter(data)));
+    const urlSearchParams = new URLSearchParams();
+    urlSearchParams.set("searchString","dis")
+    return fetch("http://localhost:8080/api/explore?" + urlSearchParams).then(res => res.json().then(data => stateSetter(data)));
 }
 
 const Functionality: React.FC = () => {

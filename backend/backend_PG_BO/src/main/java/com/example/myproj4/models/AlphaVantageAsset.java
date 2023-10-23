@@ -8,33 +8,36 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "AssetsAccApi")
-public class AssetAccAPI {
+public class AlphaVantageAsset {
     @Id
     @GeneratedValue
     private Long id;
     @JsonProperty("Symbol")
-    private String assetName;
+    private String assetAbbreviation;
     @JsonProperty("AssetType")
     private String assetType;
+    @JsonProperty("Name")
+    private String assetName;
     @JsonProperty("Beta")
     private Double beta;
 
-    public AssetAccAPI(Long id, String assetName, String assetType, Double beta) {
+    public AlphaVantageAsset(Long id, String assetAbbreviation, String assetType, String assetName, Double beta) {
         this.id = id;
-        this.assetName = assetName;
+        this.assetAbbreviation = assetAbbreviation;
         this.assetType = assetType;
+        this.assetName = assetName;
         this.beta = beta;
     }
 
-    public AssetAccAPI() {
+    public AlphaVantageAsset() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getAssetName() {
-        return assetName;
+    public String getAssetAbbreviation() {
+        return assetAbbreviation;
     }
 
     public String getAssetType() {
@@ -51,16 +54,17 @@ public class AssetAccAPI {
 
     @Override
     public String toString() {
-        return "AssetAccAPI{" +
+        return "AlphaVantageAsset{" +
                 "id=" + id +
-                ", assetName='" + assetName + '\'' +
+                ", assetAbbreviation='" + assetAbbreviation + '\'' +
                 ", assetType='" + assetType + '\'' +
+                ", assetName='" + assetName + '\'' +
                 ", beta=" + beta +
                 '}';
     }
 
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
+    public void setAssetAbbreviation(String assetName) {
+        this.assetAbbreviation = assetName;
     }
 
     public void setAssetType(String assetType) {
