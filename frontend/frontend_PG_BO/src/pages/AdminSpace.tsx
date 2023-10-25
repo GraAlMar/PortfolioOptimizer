@@ -1,9 +1,9 @@
 import React from "react";
 
-const AdminSpace: React.FC = () => {
+const AdminSpace: React.FC = (handleShowUsers) => {
     return (
         <div>
-            // list of users with changing role, deleting and ? functionalities 
+            <button onClick={handleShowUsers}>Show User List</button>
         </div>
     )
 }

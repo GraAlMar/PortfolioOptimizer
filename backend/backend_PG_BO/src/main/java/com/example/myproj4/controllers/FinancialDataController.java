@@ -4,6 +4,9 @@ import com.example.myproj4.models.Asset;
 import com.example.myproj4.services.AlphaVantageApiService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api")
@@ -19,18 +22,18 @@ public class FinancialDataController {
     @GetMapping("/explore")
     public Asset getFinancialDataBySymbol(@RequestParam String searchString) {
         System.out.println("searchStringSymbolSearch = " + searchString);
-        var apiPart = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=";
+
         var fetched = alphaVantageApiService.getAlphaVantageAssetToStore(searchString);
         alphaVantageApiService.save(fetched);
-        return alphaVantageApiService.getFinancialData(searchString, apiPart);
+        return alphaVantageApiService.getFinancialData(searchString);
     }
 
     @GetMapping("/exploreByName")
-    public Asset getFinancialDataByName(@RequestParam String searchString) {
+    public List<Asset> getFinancialDataByName(@RequestParam String searchString) {
         System.out.println("searchStringNameSearch = " + searchString);
-        var apiPart = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=";
+        var symbols = alphaVantageApiService.getSymbolsWithSearchByName(searchString);
 
-        return alphaVantageApiService.getFinancialData(searchString, apiPart);
+        return ((List<Asset>) symbols.stream().map(symbol -> alphaVantageApiService.getFinancialData(symbol)));
     }
 
 }

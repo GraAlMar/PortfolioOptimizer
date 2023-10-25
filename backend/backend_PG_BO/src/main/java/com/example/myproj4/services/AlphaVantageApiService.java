@@ -41,9 +41,9 @@ public class AlphaVantageApiService {
     }
 
 
-    public Asset getFinancialData(String symbolSearchString, String apiPart) {
+    public Asset getFinancialData(String symbolSearchString) {
         System.out.println("alphaVantageApiKey = " + alphaVantageApiKey);
-        String apiUrl = apiPart + symbolSearchString + "&apikey=" + alphaVantageApiKey;
+        String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + symbolSearchString + "&apikey=" + alphaVantageApiKey;
         System.out.println("apiUrl = " + apiUrl);
 
         return webClient.get()
@@ -92,10 +92,9 @@ public class AlphaVantageApiService {
 
     @Scheduled(cron = "@hourly") //bzw. (cron="0 0 * * * *")
     public void updateAlphaVantageData(){
-        var apiPart = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=";
         List<Asset> assets = assetService.findAll();
         var updatedAssets = assets.stream().map(asset -> {
-            var newAsset = getFinancialData(asset.getAbbreviation(), apiPart);
+            var newAsset = getFinancialData(asset.getAbbreviation());
             newAsset.setId(asset.getId());
             return newAsset;
         }).collect(Collectors.toList());

@@ -19,7 +19,7 @@ const createUser = (user: User) => {
     
   };
 
-const UserRegistration: React.FC<UserRegistrationProps> = () => {
+const UserRegistration: React.FC<> = () => {
     
     const navigate = useNavigate();
 

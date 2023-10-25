@@ -1,8 +1,13 @@
 import React from "react";
+import { User } from "../data/UserType";
 import { useState } from "react";
-import { UserRegistrationFormProps } from "../data/UserRegistrationFormProps";
 
-
+interface UserRegistrationFormProps {
+  user?: User;
+  onSave: (user: User) => void;
+  onCancel: () => void;
+  
+}
 
 const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({user, onSave, onCancel}) => {
     const [username, setUsername] = useState(user?.username ?? "");
