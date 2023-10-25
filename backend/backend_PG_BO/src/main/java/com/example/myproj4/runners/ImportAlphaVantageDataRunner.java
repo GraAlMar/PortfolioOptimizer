@@ -16,9 +16,10 @@ public class ImportAlphaVantageDataRunner implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        var ibm = alphaVantageApiService.getFinancialData("IBM");
+        var apiPart = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=";
+        var ibm = alphaVantageApiService.getFinancialData("IBM",apiPart);
         assetService.save(ibm);
-        var tesla = alphaVantageApiService.getFinancialData("TSLA");
+        var tesla = alphaVantageApiService.getFinancialData("TSLA", apiPart);
         assetService.save(tesla);
         System.out.println(ibm + " " + tesla);
 

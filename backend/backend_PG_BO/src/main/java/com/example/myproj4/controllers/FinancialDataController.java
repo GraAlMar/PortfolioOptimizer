@@ -17,39 +17,20 @@ public class FinancialDataController {
     }
 
     @GetMapping("/explore")
-    public Asset getFinancialData(@RequestParam String searchString) {
-        var fetched = alphaVantageApiService.getAssetAccAPIToStore(searchString);
+    public Asset getFinancialDataBySymbol(@RequestParam String searchString) {
+        System.out.println("searchStringSymbolSearch = " + searchString);
+        var apiPart = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=";
+        var fetched = alphaVantageApiService.getAlphaVantageAssetToStore(searchString);
         alphaVantageApiService.save(fetched);
-        return alphaVantageApiService.getFinancialData(searchString);
-    }
-    /*
-    @GetMapping("/explore")
-    public Mono<String> getFinancialData(@RequestParam String searchString) {
-        APIKey apiKey = new APIKey();
-        System.out.println("apiKey = " + apiKey);
-        String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + searchString + "&apikey=" + apiKey + "'";
-        System.out.println(apiUrl);
-
-        return webClient.get()
-                .uri(apiUrl)
-                .retrieve()
-                .bodyToMono(String.class);
-    }*/
-
-
-    /*public FinancialDataController(WebClient webClient) {
-        this.webClient = webClient;
+        return alphaVantageApiService.getFinancialData(searchString, apiPart);
     }
 
-    @GetMapping("/explore")
-    public Mono<String> getFinancialData(@RequestParam String searchString) {
-        APIKey apiKey = new APIKey();
-        String apiUrl = "'https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + searchString + "&apikey=" + apiKey + "'";
-        System.out.println(apiUrl);
-        WebClient webClient = WebClient.create(apiUrl);
-        return webClient.get()
-                .retrieve()
-                .bodyToMono(String.class);
-    }*/
+    @GetMapping("/exploreByName")
+    public Asset getFinancialDataByName(@RequestParam String searchString) {
+        System.out.println("searchStringNameSearch = " + searchString);
+        var apiPart = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=";
+
+        return alphaVantageApiService.getFinancialData(searchString, apiPart);
+    }
 
 }

@@ -1,36 +1,52 @@
 import React, { useState, useEffect} from "react";
 import SearchBar from "../components/SearchBar";
+import InstantSearchBar from "../components/InstantSearchBar";
+
 import AssetResultList from "../components/AssetResultList";
 import { Asset } from "../data/AssetType";
 
-const fetchAssets = (stateSetter: React.Dispatch<React.SetStateAction<Asset[]>>, queryParams: string): Promise<void> => {
+const fetchAssetsBySymbol = (stateSetter: React.Dispatch<React.SetStateAction<Asset[]>>, queryParams: string): Promise<void> => {
     const urlSearchParams = new URLSearchParams();
-    urlSearchParams.set("searchString","dis")
+    urlSearchParams.set("searchString", queryParams)
     return fetch("http://localhost:8080/api/explore?" + urlSearchParams).then(res => res.json().then(data => stateSetter(data)));
+}
+
+const fetchAssetsByName = (stateSetter: React.Dispatch<React.SetStateAction<Asset[]>>, queryParams: string): Promise<void> => {
+    const urlSearchParams = new URLSearchParams();
+    urlSearchParams.set("searchString", queryParams)
+    return fetch("http://localhost:8080/api/exploreByName?" + urlSearchParams).then(res => res.json().then(data => stateSetter(data)));
 }
 
 const Functionality: React.FC = () => {
     const [assets, setAssets] = useState<Asset[] | Asset>();
 	const [userInput, setUserInput] = useState<string>("");
+    const [userInstantInput, setUserInstantInput] = useState<string>("");
 
 	useEffect(() => {
-		fetchAssets(setAssets, userInput);
+		fetchAssetsBySymbol(setAssets, userInput);
 	}, []);
 
 	const handleSearch = (searchTerm: string) => {
 		setUserInput(searchTerm);
 	};
 
+    useEffect(() => {
+		fetchAssetsByName(setAssets, userInput);
+	}, [userInstantInput]);
+    
+    const handleChange = (e) => {
+		setUserInstantInput(e.target.value);
+	};
     return (
         <div>
             {/*
-            // input of user's existing asset(s)
+            input of user search
             */}
+            <InstantSearchBar handleChange={handleChange} />
             <SearchBar onSaveSearchTerm={handleSearch} />
 			<AssetResultList assets={assets} />
             {/*
-            // form for search given certain beta and/or sharperatio and specification of how many assets to combine with what ratios
-            // list of search-results with add to portfolio-functionality 
+            todo:
             */}
         </div>
     )

@@ -7,7 +7,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm }) =
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSaveSearchTerm(searchInput); // Use the state variable here
+        onSaveSearchTerm(searchInput);
     };
 
 

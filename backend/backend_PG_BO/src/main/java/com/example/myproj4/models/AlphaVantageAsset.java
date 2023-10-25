@@ -44,6 +44,10 @@ public class AlphaVantageAsset {
         return assetType;
     }
 
+    public String getAssetName() {
+        return assetName;
+    }
+
     public Double getBeta() {
         return beta;
     }
@@ -69,6 +73,10 @@ public class AlphaVantageAsset {
 
     public void setAssetType(String assetType) {
         this.assetType = assetType;
+    }
+
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
     }
 
     public void setBeta(Double beta) {
