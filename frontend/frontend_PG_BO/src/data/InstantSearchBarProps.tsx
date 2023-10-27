@@ -1,3 +1,3 @@
 export interface InstantSearchBarProps {
-    handleChange: () => void
+    handleChange: (e: any) => void
 }

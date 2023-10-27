@@ -2,6 +2,9 @@ package com.example.myproj4.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -14,15 +17,18 @@ public class User {
     private String email;
     @Column
     private String userpassword;
-    @Column
-    private String role;
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
-    public User(Long id, String username, String email, String userpassword, String role) {
-        this.id = id;
+    public User(String username, String email, String userpassword) {
+
         this.username = username;
         this.email = email;
         this.userpassword = userpassword;
-        this.role = role;
+
     }
 
     public User() {
@@ -44,8 +50,8 @@ public class User {
         return userpassword;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     @Override
@@ -55,7 +61,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", userpassword='" + userpassword + '\'' +
-                ", role='" + role + '\'' +
+                ", roles='" + roles + '\'' +
                 '}';
     }
 
@@ -76,6 +82,6 @@ public class User {
     }
 
     public void setRole(String role) {
-        this.role = role;
+        this.roles = roles;
     }
 }

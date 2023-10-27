@@ -2,7 +2,6 @@ import React from "react";
 import UserRegistrationForm from "../components/UserRegistrationForm";
 import { User } from "../data/UserType";
 import { useNavigate } from "react-router-dom";
-import { UserRegistrationProps } from "../data/UserRegistrationProps";
 
 
 
@@ -19,7 +18,7 @@ const createUser = (user: User) => {
     
   };
 
-const UserRegistration: React.FC<> = () => {
+const UserRegistration: React.FC = () => {
     
     const navigate = useNavigate();
 
