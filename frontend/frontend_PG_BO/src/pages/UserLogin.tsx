@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const loginUser = (user: User) => {
     console.log(user)
     return fetch("http://localhost:8080/api/auth/signin", {
+      credentials: 'include',
     // return fetch("http://localhost:8080/api/users", {
       method: "POST",
       
