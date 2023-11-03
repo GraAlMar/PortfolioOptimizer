@@ -16,18 +16,18 @@ public class User {
     @Column
     private String email;
     @Column
-    private String userpassword;
+    private String userpasswordHash;
     @ManyToMany
-    @JoinTable(name = "user_roles",
+   /* @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))*/
     private Set<Role> roles = new HashSet<>();
 
-    public User(String username, String email, String userpassword) {
+    public User(String username, String email, String userpasswordHash) {
 
         this.username = username;
         this.email = email;
-        this.userpassword = userpassword;
+        this.userpasswordHash = userpasswordHash;
 
     }
 
@@ -46,8 +46,8 @@ public class User {
         return email;
     }
 
-    public String getUserpassword() {
-        return userpassword;
+    public String getUserpasswordHash() {
+        return userpasswordHash;
     }
 
     public Set<Role> getRoles() {
@@ -60,7 +60,7 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", userpassword='" + userpassword + '\'' +
+                ", userpassword='" + userpasswordHash + '\'' +
                 ", roles='" + roles + '\'' +
                 '}';
     }
@@ -77,11 +77,13 @@ public class User {
         this.email = email;
     }
 
-    public void setUserpassword(String password) {
-        this.userpassword = password;
+
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
-    public void setRole(String role) {
-        this.roles = roles;
+    public void setUserpasswordHash(String hash) {
+        this.userpasswordHash = hash;
     }
 }

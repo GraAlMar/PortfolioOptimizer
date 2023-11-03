@@ -15,8 +15,8 @@ public class Role {
     public Role() {
     }
 
-    public Role(Integer id, RoleType name) {
-        this.id = id;
+    public Role(RoleType name) {
+
         this.name = name;
     }
 

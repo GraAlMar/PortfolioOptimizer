@@ -12,11 +12,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @EnableScheduling
 @Service
@@ -42,9 +42,9 @@ public class AlphaVantageApiService {
 
 
     public Asset getFinancialData(String symbolSearchString) {
-        System.out.println("alphaVantageApiKey = " + alphaVantageApiKey);
+        //System.out.println("alphaVantageApiKey = " + alphaVantageApiKey);
         String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + symbolSearchString + "&apikey=" + alphaVantageApiKey;
-        System.out.println("apiUrl = " + apiUrl);
+        //System.out.println("apiUrl = " + apiUrl);
 
         return webClient.get()
                 .uri(apiUrl)
@@ -62,29 +62,39 @@ public class AlphaVantageApiService {
     public List<String> getSymbolsWithSearchByName(String searchNameString) {
         var apiPart = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=";
         String apiUrl = apiPart + searchNameString + "&apikey=" + alphaVantageApiKey;
+        System.out.println("apiUrl = " + apiUrl);
 
-        return webClient.get()
+        var symbolsFromNames = webClient.get()
                 .uri(apiUrl)
                 .retrieve()
-                .bodyToFlux(String.class)
-                .flatMap(response -> {
+                .bodyToMono(String.class)
+                .map(response -> {
+                    System.out.println("response = " + response);
                     try {
                         return extractSymbolsFromApiResponse(response);
                     } catch (JsonProcessingException e) {
-                        return Flux.error(new RuntimeException(e));
+                        throw new RuntimeException(e);
                     }
                 })
-        .collectList().block();
+                .block();
+        System.out.println("symbolsFromNames = " + symbolsFromNames);
+        return symbolsFromNames;
+        
     }
 
-    private Flux<String> extractSymbolsFromApiResponse(String apiResponse) throws JsonProcessingException {
+    private List<String> extractSymbolsFromApiResponse(String apiResponse) throws JsonProcessingException {
+        System.out.println("apiResponse = " + apiResponse);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> responseMap = objectMapper.readValue(apiResponse, new TypeReference<Map<String, Object>>() {});
-
+        System.out.println("responseMap = " + responseMap);
         List<Map<String, String>> bestMatches = (List<Map<String, String>>) responseMap.get("bestMatches");
+        System.out.println("bestMatches = " + bestMatches);
 
-        return Flux.fromIterable(bestMatches)
-                .map(company -> company.get("1. symbol"));
+        return bestMatches.stream()
+                .flatMap(map -> map.entrySet().stream()
+                        .filter(entry -> "1. symbol".equals(entry.getKey()))
+                        .map(Map.Entry::getValue))
+                .collect(Collectors.toList());
 
     }
 

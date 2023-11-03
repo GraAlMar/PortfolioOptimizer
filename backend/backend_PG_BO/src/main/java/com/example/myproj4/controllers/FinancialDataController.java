@@ -32,8 +32,8 @@ public class FinancialDataController {
     public List<Asset> getFinancialDataByName(@RequestParam String searchString) {
         System.out.println("searchStringNameSearch = " + searchString);
         var symbols = alphaVantageApiService.getSymbolsWithSearchByName(searchString);
-
-        return ((List<Asset>) symbols.stream().map(symbol -> alphaVantageApiService.getFinancialData(symbol)));
+        System.out.println("symbols = " + symbols);
+        return ((List<Asset>) symbols.stream().map(symbol -> alphaVantageApiService.getFinancialData(symbol)).filter(asset -> asset.getName() != null).collect(Collectors.toList()));
     }
 
 }

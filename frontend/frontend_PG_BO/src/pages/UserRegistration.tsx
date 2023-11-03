@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const createUser = (user: User) => {
     console.log(user)
-    return fetch("http://localhost:8080/api/users", {
+    return fetch("http://localhost:8080/api/auth/signup", {
+    // return fetch("http://localhost:8080/api/users", {
       method: "POST",
       
       headers: {
@@ -25,7 +26,7 @@ const UserRegistration: React.FC = () => {
     const handleCreateUser = (user: User) => {
             createUser(user)
             .then(() => {
-                navigate("/")
+                navigate("/info")
             })
             console.log(user)
     }
