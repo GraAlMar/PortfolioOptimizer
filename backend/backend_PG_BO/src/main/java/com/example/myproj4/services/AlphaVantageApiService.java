@@ -23,7 +23,8 @@ import java.util.stream.Stream;
 public class AlphaVantageApiService {
 
 
-    private final WebClient webClient;
+//    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
     @Value("${data.apis.alphavantage.apikey}")
     private  String alphaVantageApiKey;
     private final AlphaVantageAPIRepository alphaVantageAPIRepository;
@@ -33,19 +34,18 @@ public class AlphaVantageApiService {
     private final AssetService assetService;
 
     public AlphaVantageApiService(WebClient.Builder webClientBuilder, @Value("${data.apis.alphavantage.apikey}") String alphaVantageApiKey, AlphaVantageAPIRepository alphaVantageAPIRepository, AssetRepository assetRepository, AssetService assetService) {
-        this.webClient = webClientBuilder.build();
+//        this.webClient = webClientBuilder.build();
+        this.webClientBuilder = webClientBuilder;
         this.alphaVantageApiKey = alphaVantageApiKey;
         this.alphaVantageAPIRepository = alphaVantageAPIRepository;
         this.assetRepository = assetRepository;
         this.assetService = assetService;
     }
-
-
     public Asset getFinancialData(String symbolSearchString) {
+        WebClient webClient = webClientBuilder.build();
         //System.out.println("alphaVantageApiKey = " + alphaVantageApiKey);
         String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + symbolSearchString + "&apikey=" + alphaVantageApiKey;
         //System.out.println("apiUrl = " + apiUrl);
-
         return webClient.get()
                 .uri(apiUrl)
                 .retrieve()
@@ -60,6 +60,7 @@ public class AlphaVantageApiService {
                 }).block();
     }
     public List<String> getSymbolsWithSearchByName(String searchNameString) {
+        WebClient webClient = webClientBuilder.build();
         var apiPart = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=";
         String apiUrl = apiPart + searchNameString + "&apikey=" + alphaVantageApiKey;
         System.out.println("apiUrl = " + apiUrl);
@@ -82,7 +83,7 @@ public class AlphaVantageApiService {
         
     }
 
-    private List<String> extractSymbolsFromApiResponse(String apiResponse) throws JsonProcessingException {
+    public List<String> extractSymbolsFromApiResponse(String apiResponse) throws JsonProcessingException {
         System.out.println("apiResponse = " + apiResponse);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> responseMap = objectMapper.readValue(apiResponse, new TypeReference<Map<String, Object>>() {});
@@ -113,7 +114,7 @@ public class AlphaVantageApiService {
 
 
     public AlphaVantageAsset getAlphaVantageAssetToStore(String searchString) {
-
+        WebClient webClient = webClientBuilder.build();
 
         String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + searchString + "&apikey=" + alphaVantageApiKey;
 
