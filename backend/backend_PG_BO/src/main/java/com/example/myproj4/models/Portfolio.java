@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "Portfolios")
 public class Portfolio {
     @ManyToOne()
     private User user;

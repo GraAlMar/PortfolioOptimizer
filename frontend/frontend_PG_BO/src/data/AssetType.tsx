@@ -1,5 +1,7 @@
 export interface Asset {
+    id?: number;
     name: string;
-    assetSymbol?: string;
-    assetBeta?: number;
+    abbreviation?: string;
+    beta?: number;
+    price?: number;
 }

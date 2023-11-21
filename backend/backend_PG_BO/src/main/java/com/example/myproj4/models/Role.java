@@ -5,6 +5,13 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "roles")
 public class Role {
+    @Override
+    public String toString() {
+        return "Role{" +
+                "name=" + name +
+                '}';
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

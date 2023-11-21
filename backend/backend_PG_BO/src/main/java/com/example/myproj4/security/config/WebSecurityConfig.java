@@ -62,13 +62,18 @@ public class WebSecurityConfig {
 
         httpSecurity.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .cors(Customizer.withDefaults())
-                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+
+
+               .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 //               .headers((httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin())))
 
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated());
+
+                /*.authorizeRequests().anyRequest().permitAll();*/
+
         return httpSecurity.build();
 
 

@@ -16,12 +16,16 @@ public class ImportAlphaVantageDataRunner implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        var apiPart = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=";
+        //var apiPart = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=";
         var ibm = alphaVantageApiService.getFinancialData("IBM");
         assetService.save(ibm);
         var tesla = alphaVantageApiService.getFinancialData("TSLA");
         assetService.save(tesla);
-        System.out.println(ibm + " " + tesla);
+        var disney = alphaVantageApiService.getFinancialData("DIS");
+        assetService.save(disney);
+        System.out.println("ibm = " + ibm);
+        System.out.println("tesla = " + tesla);
+        System.out.println("disney = " + disney);
 
   }
 }

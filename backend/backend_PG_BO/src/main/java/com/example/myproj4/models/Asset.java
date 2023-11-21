@@ -21,15 +21,18 @@ public class Asset {
     private Double beta;
     @Column
     private Double sharperatio;
+    @Column
+    private Double price;
 
 
-    public Asset(Long id, String abbreviation, String type, String name, Double beta, Double sharperatio) {
+    public Asset(Long id, String abbreviation, String type, String name, Double beta, Double sharperatio, Double price) {
         this.id = id;
         this.abbreviation = abbreviation;
         this.type = type;
         this.name = name;
         this.beta = beta;
         this.sharperatio = sharperatio;
+        this.price = price;
     }
 
     public Asset() {
@@ -64,6 +67,10 @@ public class Asset {
         return sharperatio;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
     @Override
     public String toString() {
         return "Asset{" +
@@ -73,6 +80,7 @@ public class Asset {
                 ", name='" + name + '\'' +
                 ", beta=" + beta +
                 ", sharperatio=" + sharperatio +
+                ", price=" + price +
                 '}';
     }
 
@@ -94,5 +102,9 @@ public class Asset {
 
     public void setSharperatio(Double sharperatio) {
         this.sharperatio = sharperatio;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

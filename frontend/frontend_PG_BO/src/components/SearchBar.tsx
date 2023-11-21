@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { SearchBarProps } from "../data/SearchBarProps";
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm, title }) => {
     const [searchInput, setSearchInput] = useState(searchTerm);
 
     const onSubmit = (e: React.FormEvent) => {
@@ -16,7 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm }) =
     return (
         <form className="SearchForm" onSubmit={onSubmit}>
       <div className="control">
-        <label htmlFor="search">Search:</label>
+        <label htmlFor="search">Search by {title}:</label>
         <input
           value={searchTerm}
           onChange={(e) => setSearchInput(e.target.value)}

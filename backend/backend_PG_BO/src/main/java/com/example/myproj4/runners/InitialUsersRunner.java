@@ -37,7 +37,7 @@ public class InitialUsersRunner implements CommandLineRunner {
         roleRepository.save(roleAdmin);
 
         User user01 = new User();
-        user01.setUsername("name_01");
+        user01.setUsername("user_01");
         user01.setEmail("email_01@email.com");
         user01.setUserpasswordHash(passwordEncoder.encode("password_01"));
         userService.save(user01);
@@ -46,10 +46,11 @@ public class InitialUsersRunner implements CommandLineRunner {
         userService.register(signupRequestForUser02);
 
         User user03 = new User();
-        user03.setUsername("name_03");
+        user03.setUsername("user_03");
         user03.setEmail("email_03@email.com");
         user03.setUserpasswordHash(passwordEncoder.encode("password_03"));
         user03.addRole(roleRepository.findByName(ROLE_ADMIN));
+        System.out.println("user03 = " + user03);
         userRepository.save(user03);
 
     }

@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,6 +57,7 @@ public class AlphaVantageApiService {
                     asset.setType(alphaVantageAsset.getAssetType());
                     asset.setName(alphaVantageAsset.getAssetName());
                     asset.setBeta(alphaVantageAsset.getBeta());
+                    asset.setPrice(alphaVantageAsset.getAvPrice());
                     return asset;
                 }).block();
     }
@@ -65,22 +67,24 @@ public class AlphaVantageApiService {
         String apiUrl = apiPart + searchNameString + "&apikey=" + alphaVantageApiKey;
         System.out.println("apiUrl = " + apiUrl);
 
-        var symbolsFromNames = webClient.get()
-                .uri(apiUrl)
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(response -> {
-                    System.out.println("response = " + response);
-                    try {
-                        return extractSymbolsFromApiResponse(response);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .block();
+        if (searchNameString != "") {
+            var symbolsFromNames = webClient.get()
+                    .uri(apiUrl)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .map(response -> {
+                        System.out.println("response = " + response);
+                        try {
+                            return extractSymbolsFromApiResponse(response);
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .block();
         System.out.println("symbolsFromNames = " + symbolsFromNames);
         return symbolsFromNames;
-        
+        }
+        return new ArrayList<>();
     }
 
     public List<String> extractSymbolsFromApiResponse(String apiResponse) throws JsonProcessingException {

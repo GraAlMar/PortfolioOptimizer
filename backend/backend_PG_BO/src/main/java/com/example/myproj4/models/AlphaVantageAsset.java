@@ -7,11 +7,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "AssetsAccApi")
+@Table(name = "AlphaVantAssets")
 public class AlphaVantageAsset {
     @Id
     @GeneratedValue
     private Long id;
+
     @JsonProperty("Symbol")
     private String assetAbbreviation;
     @JsonProperty("AssetType")
@@ -20,13 +21,16 @@ public class AlphaVantageAsset {
     private String assetName;
     @JsonProperty("Beta")
     private Double beta;
+    @JsonProperty("50DayMovingAverage")
+    private Double avPrice;
 
-    public AlphaVantageAsset(Long id, String assetAbbreviation, String assetType, String assetName, Double beta) {
+    public AlphaVantageAsset(Long id, String assetAbbreviation, String assetType, String assetName, Double beta, Double avPrice) {
         this.id = id;
         this.assetAbbreviation = assetAbbreviation;
         this.assetType = assetType;
         this.assetName = assetName;
         this.beta = beta;
+        this.avPrice = avPrice;
     }
 
     public AlphaVantageAsset() {
@@ -52,8 +56,8 @@ public class AlphaVantageAsset {
         return beta;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Double getAvPrice() {
+        return avPrice;
     }
 
     @Override
@@ -64,7 +68,12 @@ public class AlphaVantageAsset {
                 ", assetType='" + assetType + '\'' +
                 ", assetName='" + assetName + '\'' +
                 ", beta=" + beta +
+                ", avPrice=" + avPrice +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setAssetAbbreviation(String assetName) {
@@ -81,5 +90,9 @@ public class AlphaVantageAsset {
 
     public void setBeta(Double beta) {
         this.beta = beta;
+    }
+
+    public void setAvPrice(Double avPrice) {
+        this.avPrice = avPrice;
     }
 }

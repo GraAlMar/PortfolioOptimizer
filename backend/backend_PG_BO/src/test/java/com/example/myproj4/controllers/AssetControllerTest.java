@@ -31,7 +31,7 @@ class AssetControllerTest {
         List<Asset> assets = new ArrayList<>(List.of(new Asset(),new Asset(),new Asset()));
         when(mockedAssetService.findAll()).thenReturn(assets);
         List<Asset> expected = assets;
-        List<Asset> actual = assetController.getAll();
+        List<Asset> actual = assetController.getAll(null);
         assertEquals(expected,actual);
     }
 

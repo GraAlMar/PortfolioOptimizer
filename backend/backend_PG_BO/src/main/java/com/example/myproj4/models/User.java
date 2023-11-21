@@ -22,6 +22,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))*/
     private Set<Role> roles = new HashSet<>();
+    @Embedded
+    ShortList shortList;
+    @ManyToOne
+    Asset mainAsset;
 
     public User(String username, String email, String userpasswordHash) {
 

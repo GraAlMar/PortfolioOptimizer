@@ -14,6 +14,8 @@ import org.springframework.web.util.WebUtils;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+
 @Component
 
 public class JwtUtils {
@@ -22,16 +24,18 @@ public class JwtUtils {
 
     private int jwtExpirationMs;
 
-    private String jwtCookie;
+    private String jwtCookieName;
 
-    public JwtUtils(@Value("${bo.app.jwtSecret}") String jwtSecret,@Value("${bo.app.jwtExpirationMs}") int jwtExpirationMs, @Value("${bo.app.jwtCookieName}") String jwtCookie) {
+    public JwtUtils(@Value("${bo.app.jwtSecret}") String jwtSecret,
+                    @Value("${bo.app.jwtExpirationMs}") int jwtExpirationMs,
+                    @Value("${bo.app.jwtCookieName}") String jwtCookieName) {
         this.jwtSecret = jwtSecret;
         this.jwtExpirationMs = jwtExpirationMs;
-        this.jwtCookie = jwtCookie;
+        this.jwtCookieName = jwtCookieName;
     }
 
     public String getJwtFromCookies(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+        Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
         if (cookie != null) {
             return cookie.getValue();
         } else
@@ -43,18 +47,21 @@ public class JwtUtils {
     public String generateTokenFromUsername(String username) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("scope", List.of("ADMIN","USER"))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
+
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24*60*60).httpOnly(true).build();
+
+        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, jwt).path("/api").maxAge(24*60*60).httpOnly(true).build();
         return cookie;
     }
     public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, null).path("/api").build();
         return cookie;
     }
     public String getUsernameFromJwtToken(String token) {

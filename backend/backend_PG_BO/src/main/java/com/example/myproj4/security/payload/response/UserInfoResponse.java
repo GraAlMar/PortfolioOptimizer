@@ -15,6 +15,16 @@ public class UserInfoResponse {
         this.roles = roles;
     }
 
+    @Override
+    public String toString() {
+        return "UserInfoResponse{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }

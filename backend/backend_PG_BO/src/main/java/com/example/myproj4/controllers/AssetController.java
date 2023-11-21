@@ -2,6 +2,7 @@ package com.example.myproj4.controllers;
 import com.example.myproj4.models.Asset;
 import com.example.myproj4.repositories.AssetRepository;
 import com.example.myproj4.services.AssetService;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class AssetController {
     }
 
     @GetMapping("/assets")
-    List<Asset> getAll() {
+    List<Asset> getAll(Authentication auth) {
+        System.out.println("auth = " + auth);
         return assetService.findAll();
     }
     @PostMapping("/assets")
