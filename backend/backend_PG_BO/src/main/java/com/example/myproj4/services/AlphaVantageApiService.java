@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class AlphaVantageApiService {
 
 
-//    private final WebClient webClient;
+
     private final WebClient.Builder webClientBuilder;
     @Value("${data.apis.alphavantage.apikey}")
     private  String alphaVantageApiKey;
@@ -32,15 +32,15 @@ public class AlphaVantageApiService {
     private final AssetRepository assetRepository;
 
 
-    private final AssetService assetService;
 
-    public AlphaVantageApiService(WebClient.Builder webClientBuilder, @Value("${data.apis.alphavantage.apikey}") String alphaVantageApiKey, AlphaVantageAPIRepository alphaVantageAPIRepository, AssetRepository assetRepository, AssetService assetService) {
-//        this.webClient = webClientBuilder.build();
+    public AlphaVantageApiService(WebClient.Builder webClientBuilder, @Value("${data.apis.alphavantage.apikey}") String alphaVantageApiKey,
+                                  AlphaVantageAPIRepository alphaVantageAPIRepository,
+                                  AssetRepository assetRepository) {
+
         this.webClientBuilder = webClientBuilder;
         this.alphaVantageApiKey = alphaVantageApiKey;
         this.alphaVantageAPIRepository = alphaVantageAPIRepository;
         this.assetRepository = assetRepository;
-        this.assetService = assetService;
     }
     public Asset getFinancialData(String symbolSearchString) {
         WebClient webClient = webClientBuilder.build();
@@ -107,7 +107,7 @@ public class AlphaVantageApiService {
 
     @Scheduled(cron = "@hourly") //bzw. (cron="0 0 * * * *")
     public void updateAlphaVantageData(){
-        List<Asset> assets = assetService.findAll();
+        List<Asset> assets = assetRepository.findAll();
         var updatedAssets = assets.stream().map(asset -> {
             var newAsset = getFinancialData(asset.getAbbreviation());
             newAsset.setId(asset.getId());

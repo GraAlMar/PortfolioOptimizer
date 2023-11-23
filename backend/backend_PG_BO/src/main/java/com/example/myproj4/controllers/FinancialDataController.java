@@ -43,12 +43,9 @@ public class FinancialDataController {
     public List<Asset> getFinancialDataByName(@RequestParam String searchString, Authentication authNameSearch) {
         System.out.println("searchStringNameSearch = " + searchString);
         System.out.println("authNameSearch = " + authNameSearch);
-        var assets = assetService.checkIfNameAlreadyInDB(searchString) ? assetService.findByName(searchString) : (((List<Asset>) alphaVantageApiService.getSymbolsWithSearchByName(searchString).stream().map(symbol -> alphaVantageApiService.getFinancialData(symbol)).filter(asset -> asset.getName() != null).collect(Collectors.toList())));
-        assetService.saveAll(assets);
-        return assets;
-        /*var symbols = alphaVantageApiService.getSymbolsWithSearchByName(searchString);
-        System.out.println("symbols = " + symbols);
-        return ((List<Asset>) symbols.stream().map(symbol -> alphaVantageApiService.getFinancialData(symbol)).filter(asset -> asset.getName() != null).collect(Collectors.toList()));*/
+
+        return assetService.searchByName(searchString);
+
     }
 
 }

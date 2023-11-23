@@ -42,13 +42,11 @@ public class SessionController {
             var roles = currentUser.getRoles().stream().map(role -> role.toString()).collect(Collectors.toList());
             var response = new UserInfoResponse(currentUser.getId(), currentUser.getUsername(), currentUser.getEmail(), roles);
             System.out.println("response = " + response);
+            System.out.println("authentication.isAuth = " + authentication.isAuthenticated());
+            System.out.println("authentication.getAuth = " + authentication.getAuthorities());
             return response;
-
         }
 
-
-        System.out.println("authentication.isAuth = " + authentication.isAuthenticated());
-        System.out.println("authentication.getAuth = " + authentication.getAuthorities());
 
         return null;
     }

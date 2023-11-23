@@ -11,4 +11,8 @@ public interface AssetRepository extends JpaRepository<Asset,Long> {
 
     List<Asset> findAllByNameContainsIgnoreCase(String name);
     boolean existsByNameContainsIgnoreCase(String name);
+
+    boolean existsByAbbreviation(String abbreviation);
+
+    List<Asset> findAllByAbbreviationIn(List<String> abbreviations);
 }
