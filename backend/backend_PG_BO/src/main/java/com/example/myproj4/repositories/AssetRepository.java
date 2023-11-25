@@ -6,13 +6,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AssetRepository extends JpaRepository<Asset,Long> {
-    Asset findAssetByAbbreviationContainsIgnoreCaseOrNameContainsIgnoreCase(String symbol, String name);
     boolean existsByAbbreviationContainsIgnoreCaseOrNameContainsIgnoreCase(String symbol, String name);
-
-    List<Asset> findAllByNameContainsIgnoreCase(String name);
     boolean existsByNameContainsIgnoreCase(String name);
 
     boolean existsByAbbreviation(String abbreviation);
+    Asset findAssetByAbbreviationContainsIgnoreCaseOrNameContainsIgnoreCase(String symbol, String name);
+
+    List<Asset> findAllByNameContainsIgnoreCase(String name);
+
+    Asset findByAbbreviation(String symbol);
+
+    Asset findByAbbreviationContainsIgnoreCase(String symbol);
 
     List<Asset> findAllByAbbreviationIn(List<String> abbreviations);
+
+    boolean existsByAbbreviationContainsIgnoreCase(String symbol);
 }

@@ -29,14 +29,12 @@ public class FinancialDataController {
     public Asset getFinancialDataBySymbol(@RequestParam String searchString, Authentication authSymbolSearch) {
         System.out.println("authSymbolSearch = " + authSymbolSearch);
         System.out.println("searchStringSymbolSearch = " + searchString);
-        var asset = assetService.checkIfAlreadyInDB(searchString, searchString) ? assetService.findByNameOrSymbol(searchString, searchString) : alphaVantageApiService.getFinancialData(searchString);
-/*
-        var alphaVantageAssetToStore = alphaVantageApiService.getAlphaVantageAssetToStore(searchString);
-        alphaVantageApiService.save(alphaVantageAssetToStore);
-        var asset = alphaVantageApiService.getFinancialData(searchString);*/
-        assetService.save(asset);
 
-        return asset;
+        /*var asset = assetService.checkIfAlreadyInDB(searchString, searchString) ? assetService.findByNameOrSymbol(searchString, searchString) : alphaVantageApiService.getFinancialData(searchString);
+
+        assetService.save(asset);*/
+
+        return assetService.searchBySymbol(searchString);
     }
 
     @GetMapping("/exploreByName")
