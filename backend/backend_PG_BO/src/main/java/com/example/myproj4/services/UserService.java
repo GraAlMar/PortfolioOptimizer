@@ -1,6 +1,7 @@
 package com.example.myproj4.services;
 
 import com.example.myproj4.models.User;
+import com.example.myproj4.repositories.AssetRepository;
 import com.example.myproj4.repositories.RoleRepository;
 import com.example.myproj4.repositories.UserRepository;
 import com.example.myproj4.security.payload.request.SignupRequest;
@@ -14,11 +15,13 @@ import static com.example.myproj4.models.RoleType.ROLE_USER;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final AssetRepository assetRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, AssetRepository assetRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.assetRepository = assetRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -43,4 +46,21 @@ public class UserService {
         return userRepository.findByUsername(username).get();
     }
 
+    public User addMain(Long userid, String assetSymbol) {
+        var asset = assetRepository.findByAbbreviationContainsIgnoreCase(assetSymbol);
+        System.out.println("asset = " + asset);
+        User userToChange = userRepository.findById(userid).get();
+        userToChange.setMainAsset(asset);
+        System.out.println("userToChange = " + userToChange);
+
+        return userRepository.save(userToChange);
+    }
+
+    public User addToShortList(Long userid, String assetSymbol) {
+        var asset = assetRepository.findByAbbreviationContainsIgnoreCase(assetSymbol);
+        User userToChange = userRepository.findById(userid).get();
+        userToChange.addToShortList(asset);
+        System.out.println("userToChange = " + userToChange);
+        return userRepository.save(userToChange);
+    }
 }

@@ -44,9 +44,7 @@ public class AlphaVantageApiService {
     }
     public Asset getFinancialData(String symbolSearchString) {
         WebClient webClient = webClientBuilder.build();
-        //System.out.println("alphaVantageApiKey = " + alphaVantageApiKey);
         String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + symbolSearchString + "&apikey=" + alphaVantageApiKey;
-        //System.out.println("apiUrl = " + apiUrl);
         return webClient.get()
                 .uri(apiUrl)
                 .retrieve()

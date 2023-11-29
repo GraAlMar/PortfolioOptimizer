@@ -26,6 +26,18 @@ public class FinancialDataController {
     }
 
     @GetMapping("/explore")
+    public List<Asset> getFinancialData(@RequestParam String searchString, Authentication authSymbolSearch) {
+        System.out.println("authSymbolSearch = " + authSymbolSearch);
+        System.out.println("searchStringSymbolSearch = " + searchString);
+
+        /*var asset = assetService.checkIfAlreadyInDB(searchString, searchString) ? assetService.findByNameOrSymbol(searchString, searchString) : alphaVantageApiService.getFinancialData(searchString);
+
+        assetService.save(asset);*/
+
+        return assetService.search(searchString);
+    }
+
+    @GetMapping("/exploreBySymbol")
     public Asset getFinancialDataBySymbol(@RequestParam String searchString, Authentication authSymbolSearch) {
         System.out.println("authSymbolSearch = " + authSymbolSearch);
         System.out.println("searchStringSymbolSearch = " + searchString);
@@ -36,7 +48,6 @@ public class FinancialDataController {
 
         return assetService.searchBySymbol(searchString);
     }
-
     @GetMapping("/exploreByName")
     public List<Asset> getFinancialDataByName(@RequestParam String searchString, Authentication authNameSearch) {
         System.out.println("searchStringNameSearch = " + searchString);

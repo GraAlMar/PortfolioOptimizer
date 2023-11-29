@@ -1,16 +1,19 @@
 import React from "react";
-import styles from "./UserSpace.module.css"
 import {NavLink} from "react-router-dom";
+//import {Link, NavLink, Outlet} from "react-router-dom";
+
+import styles from "./UserSpace.module.css"
+import {useUserContext} from "../UserContext.tsx";
 //import {Outlet} from "@mui/icons-material";
 
 const NavBar = () => {
     return (
         <nav className={styles.nav}>
             <ul className={styles.ul}>
-                <li className={styles.liOther}>
+                <li className={styles.li}>
                     <NavLink to="/userspace/assets">Assets</NavLink>
                 </li>
-                <li className={styles.liOther}>
+                <li className={styles.li}>
                     <NavLink to="/userspace/calculator">Beta Calculator</NavLink>
                 </li>
                 <li className={styles.li}>
@@ -21,13 +24,25 @@ const NavBar = () => {
         </nav>
     );
 };
-const Portfolios: React.FC = () => {
+const UserSpace: React.FC = () => {
+    const {user} = useUserContext()
+
     return (
         <>
             <div><p>       </p></div>
         <div>
+
             <NavBar/>
+            {/*<nav>
+                <NavLink to="search">Assets</NavLink>
+                <NavLink to="calculator">Beta-Calculator</NavLink>
+                <NavLink to="portfolios">Portfolios</NavLink>
+
+            </nav>
+            <Outlet/>*/}
+            <div><h2>Hello {user.username} !</h2></div>
         </div>
-    </>)
+        </>
+    )
 }
-export default Portfolios;
+export default UserSpace;

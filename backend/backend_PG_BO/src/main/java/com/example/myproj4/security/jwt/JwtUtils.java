@@ -57,7 +57,9 @@ public class JwtUtils {
 
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
 
+        //ResponseCookie cookie = ResponseCookie.from(jwtCookieName, jwt).path("/api").maxAge(24*60*60).httpOnly(true).build();
         ResponseCookie cookie = ResponseCookie.from(jwtCookieName, jwt).path("/api").maxAge(24*60*60).httpOnly(true).build();
+
         return cookie;
     }
     public ResponseCookie getCleanJwtCookie() {
@@ -68,8 +70,11 @@ public class JwtUtils {
         return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().getSubject();
     }
     public boolean validateJwtToken(String authToken) {
-        Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
-        return true;
+        if (authToken != null && authToken != "") {
+            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            return true;
+        }
+        return false;
     }
 
 }

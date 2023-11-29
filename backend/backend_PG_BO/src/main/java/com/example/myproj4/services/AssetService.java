@@ -39,6 +39,10 @@ public class AssetService {
     public boolean checkIfAlreadyInDB(String symbol, String name) {
         return assetRepository.existsByAbbreviationContainsIgnoreCaseOrNameContainsIgnoreCase(symbol, name);};
 
+    public List<Asset> search(String searchTerm) {
+       return searchBySymbol(searchTerm) != null ? List.of(searchBySymbol(searchTerm)) : searchByName(searchTerm);
+    }
+
     public List<Asset> searchByName(String name) {
         if (checkIfNameAlreadyInDB(name)) {
             return findByName(name);

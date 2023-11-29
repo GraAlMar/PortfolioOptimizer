@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import Welcome from './pages/Welcome';
 import UserLogin from './pages/UserLogin';
@@ -15,28 +15,68 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import {AccountCircle} from "@mui/icons-material";
-import {Menu, MenuItem} from "@mui/material";
+import {Menu, MenuItem, Snackbar} from "@mui/material";
 import Portfolios from "./pages/Portfolios.tsx";
-import {User} from "./data/UserType.tsx";
 
 import {useUserContext} from "./UserContext.tsx";
+import UserSpace from "./pages/UserSpace.tsx";
+import UserAssetsPage from "./pages/UserAssetsPage.tsx";
+import CalculatorPage from "./pages/CalculatorPage.tsx";
 
-/*const fetchSession = (): Promise<Response> => {
-  return fetch("http://localhost:8080/api/session", {
+const fetchSession = (): Promise<Response> => {
+  return fetch("http://localhost:8080/api/auth/session", {
     method: "GET",
     credentials: "include",
     headers: {"Content-Type":"application/json"}
   });
-}*/
+}
+
+const logOutUser = () => {
+
+  const response =  fetch("http://localhost:8080/api/auth/signout", {
+
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+      .then((res) => res.text());
+
+  return response;
+
+};
+
+class Calculator extends React.Component {
+  render() {
+    return null;
+  }
+}
+
 const App: React.FC = () => {
-  //const emptyUser: User = {username: ""}
-  const {user,setUser} = useUserContext()
-  //const [user, setUser] = useState<User>(emptyUser);
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {user,setUser} = useUserContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElOne, setAnchorElOne] = useState(null);
+  const [open, setOpen] = useState(false)
 
-  //console.log("user: " + user)
+  const checkSession = () => {
+      fetchSession()
+          .then(res =>  res.json()
+            )
+          .then(data => {
+            if (data.username !== null) {
+              setUser(data);
+            } else {
+              setUser(null)
+              console.log('No user data available');
+            }
+          })
+      console.log("initial render user: " + user)
+  };
+  
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,19 +91,19 @@ const App: React.FC = () => {
     setAnchorElOne(null);
   };
   const handleLogout = () => {
+    if (window.confirm("Are you sure to logout?")) {
+      logOutUser();
+      setOpen(true)
+      setUser(null)
+    }
     //setIsLoggedIn(false);
   };
 
-  /*const checkLoggedInUser = () => {
-    fetchSession().then(res => res.json().then(data => setUser(data)))
-    setIsLoggedIn(true)
-  }*/
-  return (
 
+  return (
       <div>
 
-        {/*<UserProvider>*/}
-        < Router>
+        <Router>
 
         <AppBar position="static">
           <Toolbar>
@@ -94,10 +134,10 @@ const App: React.FC = () => {
               </MenuItem>
             </Menu>
 
-            <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+            <Typography variant="h5" component="div" sx={{flexGrow: 1} }>
               BETA OPTIMIZER
             </Typography>
-            {user !== null ? (
+              {user !== null ? (
                 <div>
                   <Button
                       color="inherit"
@@ -111,12 +151,21 @@ const App: React.FC = () => {
                       open={Boolean(anchorEl)}
                       onClose={handleMenuClose}
                   >
-                    <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={() => {
-                      handleMenuClose();
-
-                    }}><Link to="/explore">My Space</Link></MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                handleMenuClose();
+                              }
+                              }><Link to="/userspace">My Space</Link>
+                    </MenuItem>
+                    <MenuItem onClick={
+                                handleMenuClose
+                              }><Link to="/profile">My Profile</Link>
+                    </MenuItem>
+                    {/*<MenuItem onClick={handleLogout}>Logout</MenuItem>*/}
+                    <MenuItem onClick={() => {
+                                handleMenuClose();
+                                handleLogout();}
+                              }><Link to="/">Logout</Link>
+                    </MenuItem>
                   </Menu>
                 </div>
             ) : (
@@ -125,7 +174,7 @@ const App: React.FC = () => {
                     color="inherit"
                     onClick={handleMenuClick}
                     >
-                  Login
+                  Login / Sign Up
 
                 </Button>
                   <Menu
@@ -136,11 +185,18 @@ const App: React.FC = () => {
 
                     <MenuItem onClick={() => {
                       handleMenuClose();}}><Link to="/login">Login</Link></MenuItem>
+                    <MenuItem onClick={() => {
+                      handleMenuClose();}}><Link to="/registration">Sign up</Link></MenuItem>
                   </Menu>
                 </div>
             )}
+
+
+
           </Toolbar>
+          <Snackbar open={open} autoHideDuration={2000} onClose={() => setOpen(false)} message= "You were logged out" />
         </AppBar>
+
           < Routes>
             < Route path="/" element={<Welcome/>}/>
             <Route path="/login" element={<UserLogin/>}/>
@@ -148,13 +204,16 @@ const App: React.FC = () => {
             <Route path="/info" element={<InfoPage/>}/>
 
             <Route path="/explore" element={<Functionality/>}/>
-            <Route path="/portfolios" element={<Portfolios/>}/>
+            <Route path="/userspace/" element={<UserSpace/>}/>
+            <Route path="/userspace/assets" element={<UserAssetsPage/>}/>
+            <Route path="/userspace/calculator" element={<CalculatorPage/>}/>
+            <Route path="/userspace/portfolios" element={<Portfolios/>}/>
 
             <Route path="/admin" element={<AdminSpace/>}/>
 
           </Routes>
         </Router>
-        {/*</UserProvider>*/}
+
       </div>
   );
 

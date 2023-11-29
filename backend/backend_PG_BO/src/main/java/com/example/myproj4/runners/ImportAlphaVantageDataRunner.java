@@ -26,6 +26,25 @@ public class ImportAlphaVantageDataRunner implements CommandLineRunner {
         System.out.println("ibm = " + ibm);
         System.out.println("tesla = " + tesla);
         System.out.println("disney = " + disney);
+        var amBatteryTechComp = alphaVantageApiService.getFinancialData("ABAT");
+        assetService.save(amBatteryTechComp);
+        System.out.println("amBatteryTechComp = " + amBatteryTechComp);
+        var cencora = alphaVantageApiService.getFinancialData("COR");
+        assetService.save(cencora);
+        System.out.println("cencora = " + cencora);
+        var fiserv = alphaVantageApiService.getFinancialData("FI");
+        assetService.save(fiserv);
+        System.out.println("fiserv = " + fiserv);
+        var nokia = alphaVantageApiService.getFinancialData("NOK");
+        assetService.save(nokia);
+        System.out.println("nokia = " + nokia);
+        var pfizer = alphaVantageApiService.getFinancialData("PFE");
+        assetService.save(pfizer);
+        System.out.println("pfizer = " + pfizer);
+        var nyTimes = alphaVantageApiService.getFinancialData("NYT");
+        assetService.save(nyTimes);
+        System.out.println("nyTimes = " + nyTimes);
+        
 
   }
 }

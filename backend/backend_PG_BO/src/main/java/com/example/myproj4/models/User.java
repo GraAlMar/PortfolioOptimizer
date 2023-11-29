@@ -24,6 +24,9 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     @Embedded
     ShortList shortList;
+
+
+
     @ManyToOne
     Asset mainAsset;
 
@@ -58,14 +61,24 @@ public class User {
         return roles;
     }
 
+    public ShortList getShortList() {
+        return shortList;
+    }
+
+    public Asset getMainAsset() {
+        return mainAsset;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", userpassword='" + userpasswordHash + '\'' +
-                ", roles='" + roles + '\'' +
+                ", userpasswordHash='" + userpasswordHash + '\'' +
+                ", roles=" + roles +
+                ", shortList=" + shortList +
+                ", mainAsset=" + mainAsset +
                 '}';
     }
 
@@ -89,5 +102,27 @@ public class User {
 
     public void setUserpasswordHash(String hash) {
         this.userpasswordHash = hash;
+    }
+
+    public void setShortList(ShortList shortList) {
+        this.shortList = shortList;
+    }
+
+    /*public void addToShortList(Asset asset) {
+        ShortList newShortList = new ShortList(new Set<Asset>(this.getShortList(), asset))
+        this.setShortList(newShortList);
+    }*/
+    public void addToShortList(Asset asset) {
+        ShortList currentShortList = this.getShortList();
+        if (currentShortList == null) {
+            currentShortList = new ShortList();
+        }
+        currentShortList.getShortList().add(asset);
+        this.setShortList(currentShortList);
+    }
+
+
+    public void setMainAsset(Asset mainAsset) {
+        this.mainAsset = mainAsset;
     }
 }

@@ -6,6 +6,7 @@ import AssetSearchTable from "../components/AssetSearchTable.tsx"
 //import AssetResultList from "../components/AssetResultList";
 import { Asset } from "../data/AssetType";
 import {User} from "../data/UserType.tsx";
+import {useUserContext} from "../UserContext.tsx";
 
 const fetchAssetsBySymbol = (stateSetter: React.Dispatch<React.SetStateAction<Asset[]>>, queryParams: string): Promise<void> => {
     const urlSearchParams = new URLSearchParams();
@@ -29,29 +30,52 @@ const fetchAssetsByName = (stateSetter: React.Dispatch<React.SetStateAction<Asse
 }
 
 const fetchSession = (): Promise<Response> => {
-    return fetch("http://localhost:8080/api/session", {
+    return fetch("http://localhost:8080/api/auth/session", {
         method: "GET",
         credentials: "include",
         headers: {"Content-Type":"application/json"}
     });
 }
+const fetchMain = (userId: number, asset: Asset) => {
+    fetch(`http://localhost:8080/api/users/${userId}/main`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( asset ),
+    })
+}
 
+const fetchShortListAsset = (userId: number, asset: Asset) => {
+    fetch(`http://localhost:8080/api/users/${userId}/shortlist`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(asset ),
+    })
+}
 const Functionality: React.FC = () => {
     const [assets, setAssets] = useState<Asset[]>();
-    const [current, setCurrent] = useState<User>()
+    //const [current, setCurrent] = useState<User>()
 	//const [userInput, setUserInput] = useState<string>("");
     //const [userInstantInput, setUserInstantInput] = useState<string>("");
     const [main, setMain] = useState<Asset>();
-    const [shortList, setShortList] = useState<Asset[]>([]);
+    //const [shortList, setShortList] = useState<Asset[]>([]);
+    const [shortListAsset, setShortListAsset] = useState<Asset>();
+
+    const {user} = useUserContext();
+
 
     //console.log("Main: " + main);
     //console.log("ShortList: " + shortList);
     //console.log("search results (assets): " + assets)
 
-    console.log("current: " + current)
-    function handleButtonClick() {
+    /*function handleButtonClick() {
         fetchSession().then(res => res.json().then(data => setCurrent(data)))
-    }
+    }*/
 
 	const handleSearchBySymbol = (searchTerm: string) => {
 		fetchAssetsBySymbol(setAssets, searchTerm);
@@ -65,20 +89,26 @@ const Functionality: React.FC = () => {
 
 
     function handleSetMain(asset: Asset) {
+        console.log("userid: " + user.id)
+
+        fetchMain(user.id,asset)
         console.log(asset)
-        return setMain(asset);
+        setMain(asset)
+
     }
 
     function handleAddMatcher(asset: Asset) {
         console.log(asset)
-        setShortList(prevShortList => [...prevShortList, asset]);
+        fetchShortListAsset(user.id,asset)
+        //setShortList(prevShortList => [...prevShortList, asset]);
+        setShortListAsset(asset);
     }
 
 
 
 
     return <div>
-        <button type="button" onClick={handleButtonClick}></button>
+        {/*<button type="button" onClick={handleButtonClick}></button>*/}
         <SearchBar onSaveSearchTerm={handleSearchByName} title={"name"}/>
         <SearchBar onSaveSearchTerm={handleSearchBySymbol} title={"symbol"}/>
         {/*{assets ? <AssetResultList assets={assets} onSelect={handleSetMain} onSave={handleAddMatcher} /> : null}*/}

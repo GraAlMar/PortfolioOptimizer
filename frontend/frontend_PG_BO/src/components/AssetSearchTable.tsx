@@ -27,14 +27,14 @@ const AssetSearchTable: React.FC<AssetSearchTableProps> = ({assets, onSetAsMain,
         sortable: false,
         filterable: false,
         renderCell: row => <ThemeProvider theme={blueTheme}><Button
-            onClick={() => onSetAsMain(row.id)}>Set as Main</Button></ThemeProvider> },
+            onClick={() => {console.log(row); return onSetAsMain(row.row)}}>Set as Main</Button></ThemeProvider> },
         {field: "id2",
             headerName: "",
             width: 200,
             sortable: false,
             filterable: false,
             renderCell: row => <ThemeProvider theme={greenTheme}><Button
-                onClick={() => onAddToShortList(row.id)}>Add to Shortlist</Button></ThemeProvider> }
+                onClick={() => {console.log(row); return onAddToShortList(row.row)}}>Add to Shortlist</Button></ThemeProvider> }
     ]
     return (<div style={{height: 500, width: '100%'}}>
         <DataGrid columns={columns} rows={assets} getRowId={row => row.abbreviation}></DataGrid>

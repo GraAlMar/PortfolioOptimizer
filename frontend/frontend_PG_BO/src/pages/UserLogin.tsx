@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import UserLoginForm from '../components/UserLoginForm';
 
 
@@ -9,7 +9,7 @@ import {useUserContext} from "../UserContext.tsx";
 //import {authenticate} from "../ApiComm.tsx";
 
 const fetchSession = (): Promise<Response> => {
-    return fetch("http://localhost:8080/api/session", {
+    return fetch("http://localhost:8080/api/auth/session", {
         method: "GET",
         credentials: "include",
         headers: {"Content-Type":"application/json"}
@@ -36,7 +36,7 @@ const loginUser = (user: User) => {
 const UserLogin: React.FC = () => {
     //const [user,setUser] = useState<User>()
     const {user, setUser} = useUserContext();
-    console.log("userFromLogin: " + user)
+    console.log("user at initial render of LoginPage: " + user)
     const navigate = useNavigate();
 
     const handleLoginUser = (user: User) => {
@@ -45,44 +45,8 @@ const UserLogin: React.FC = () => {
                 navigate("/info")
             })
 
-        fetchSession().then(res => res.json().then(data =>{console.log("data: " + data);return  setUser(data)}))
-
+        fetchSession().then(res => res.json().then(data =>{console.log("data from fetchSession at login: " + data); setUser(data)}))
     }
-
-    /*const handleLoginUser = (user: User) => {
-        dispatch({ type: "authenticate" });
-
-        loginUser(user)
-            .then(() => {
-                navigate("/info");
-                return authenticate();
-            })
-            .then(currentUser => {
-                console.log("currentUser: " + currentUser)
-                dispatch({ type: "authenticated", user: currentUser });
-            })
-            /!*.catch(error => {
-
-            });*!/
-
-    };*/
-
-    /*const handleLoginUser = async (user: User) => {
-        dispatch({ type: "authenticate" });
-
-        try {
-            await loginUser(user);
-            const currentUser = await authenticate(user);
-            console.log("currentUser: " + currentUser)
-            dispatch({ type: "authenticated", user: currentUser });
-            navigate("/info");
-        } catch (error) {
-            // Handle errors here
-        }
-    };*/
-
-
-
 
     return (
         <div>
@@ -94,6 +58,4 @@ const UserLogin: React.FC = () => {
         </div>
     )
 }
-
-
 export default UserLogin;
