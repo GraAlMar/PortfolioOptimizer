@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+parking.md
+application-dev.properties
 ### STS ###
 .apt_generated
 .classpath
