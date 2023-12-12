@@ -12,8 +12,8 @@ public class Portfolio {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToMany
-    Set<Asset> assets;
+    @OneToMany(mappedBy = "portfolio")
+    Set<Investment> investments;
 
     public void setId(Long id) {
         this.id = id;

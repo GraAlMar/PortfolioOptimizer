@@ -13,6 +13,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +103,131 @@ public class AlphaVantageApiService {
 
     }
 
+    public List<String> getAdjustedClosePrices(String assetSymbol) {
+        WebClient webClient = webClientBuilder.build();
+        var apiPart = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";
+        String apiUrl = apiPart + assetSymbol + "&outputsize=compact&apikey=" + alphaVantageApiKey;
+        System.out.println("apiUrl = " + apiUrl);
 
+        if (assetSymbol != "") {
+            var prices = webClient.get()
+                    .uri(apiUrl)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .map(response -> {
+                        System.out.println("response = " + response);
+                        try {
+                            return extractAdjustedClosePriceFromApiResponse(response);
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .block();
+            System.out.println("prices = " + prices);
+            return prices;
+        }
+        return new ArrayList<>();
+
+    }
+    public List<String> extractAdjustedClosePriceFromApiResponse(String apiResponse) throws JsonProcessingException {
+        System.out.println("apiResponse = " + apiResponse);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> responseMap = objectMapper.readValue(apiResponse, new TypeReference<Map<String, Object>>() {});
+        System.out.println("responseMap = " + responseMap);
+        Map<String, Map<String,String>> timeSeriesDaily = (Map<String, Map<String,String>>) responseMap.get("Time Series (Daily)");
+        System.out.println("timeSeriesDaily = " + timeSeriesDaily);
+
+        List<String> adjustedCloseValues = new ArrayList<>();
+
+        int count = 0;
+        for (Map.Entry<String, Map<String, String>> entry : timeSeriesDaily.entrySet()) {
+            if (count >= 10) {
+                break;
+            }
+
+            Map<String, String> data = entry.getValue();
+            if (data.containsKey("5. adjusted close")) {
+                adjustedCloseValues.add(data.get("5. adjusted close"));
+            }
+
+            count++;
+        }
+
+        System.out.println("Adjusted Close Values: " + adjustedCloseValues);
+        return adjustedCloseValues;
+    }
+
+    public List<Double> getTreasuryYield() {
+        WebClient webClient = webClientBuilder.build();
+
+        String apiUrl = "https://www.alphavantage.co/query?function=TREASURY_YIELD&interval=daily&maturity=10year&apikey=" + alphaVantageApiKey;
+        var treasuryYields = webClient.get()
+                .uri(apiUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(response -> {
+                    System.out.println("response = " + response);
+                    try {
+                        return extractTreasuryYieldsFromApiResponse(response);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .block();
+        System.out.println("treasuryYields = " + treasuryYields);
+        return treasuryYields;
+    }
+
+    public List<Double> extractTreasuryYieldsFromApiResponse(String apiResponse) throws JsonProcessingException {
+        System.out.println("apiResponse = " + apiResponse);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> responseMap = objectMapper.readValue(apiResponse, new TypeReference<Map<String, Object>>() {});
+        System.out.println("responseMap = " + responseMap);
+        List<Map<String,String>> dayYields = (List<Map<String, String>>) responseMap.get("data");
+        System.out.println("dayYields = " + dayYields);
+
+        List<String> treasuryYields = new ArrayList<>();
+
+        for (int i = 0; i < 11; i ++) {
+            if (dayYields.get(i).containsKey("value")) {
+                treasuryYields.add(dayYields.get(i).get("value"));
+            }
+        }
+        System.out.println("treasuryYields = " + treasuryYields);
+        var treasuryYieldsAsDoubles = fillMissingValues(treasuryYields);
+        return treasuryYieldsAsDoubles;
+    }
+
+    public static List<Double> fillMissingValues(List<String> lst) {
+        if (lst.contains(".")) {
+            List<Double> doubleList = new ArrayList<>();
+            for (String s : lst) {
+                if (s.equals(".")) {
+                    doubleList.add(null);
+                } else {
+                    doubleList.add(Double.parseDouble(s));
+                }
+            }
+            double sum = 0;
+            int count = 0;
+            for (Double d : doubleList) {
+                if (d != null) {
+                    sum += d;
+                    count++;
+                }
+            }
+            double avg = Math.round((sum / count) * 100.0) / 100.0;
+
+            for (int i = 0; i < doubleList.size(); i++) {
+                if (doubleList.get(i) == null) {
+                    doubleList.set(i, avg);
+                }
+            }
+            return doubleList;
+        } else {
+            return lst.stream().map(Double::parseDouble).collect(Collectors.toList());
+        }
+    }
 
     @Scheduled(cron = "@hourly") //bzw. (cron="0 0 * * * *")
     public void updateAlphaVantageData(){
@@ -120,7 +246,6 @@ public class AlphaVantageApiService {
 
         String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + searchString + "&apikey=" + alphaVantageApiKey;
 
-
         return webClient.get()
                 .uri(apiUrl)
                 .retrieve()
@@ -134,5 +259,6 @@ public class AlphaVantageApiService {
     public AlphaVantageAsset save(AlphaVantageAsset alphaVantageAsset) {
         return alphaVantageAPIRepository.save(alphaVantageAsset);
     }
+
 
 }

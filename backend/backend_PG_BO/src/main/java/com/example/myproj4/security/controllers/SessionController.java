@@ -1,11 +1,13 @@
 package com.example.myproj4.security.controllers;
 
+import com.example.myproj4.models.User;
 import com.example.myproj4.security.jwt.AuthTokenFilter;
 import com.example.myproj4.security.jwt.JwtUtils;
 import com.example.myproj4.security.payload.response.UserInfoResponse;
 import com.example.myproj4.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,20 +34,25 @@ public class SessionController {
     }
 
     @GetMapping("/session")
-    public UserInfoResponse getSession(Authentication authentication, HttpServletRequest request) {
-        String jwt = authTokenFilter.parseJwt(request);
-        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-            String username = jwtUtils.getUsernameFromJwtToken(jwt);
+//    public UserInfoResponse getSession(Authentication authentication) {
+    public User getSession(Authentication authentication) {
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
             System.out.println("username = " + username);
-            var currentUser = userService.findByName(username);
+            User currentUser = userService.findByName(username);
             System.out.println("currentUser = " + currentUser);
-            var roles = currentUser.getRoles().stream().map(role -> role.getName().toString()).collect(Collectors.toList());
-            var response = new UserInfoResponse(currentUser.getId(), currentUser.getUsername(), currentUser.getEmail(), roles);
+            var response = currentUser;
+
+            //var roles = currentUser.getRoles().stream().map(role -> role.getName().toString()).collect(Collectors.toList());
+            //var response = new UserInfoResponse(currentUser.getId(), currentUser.getUsername(), currentUser.getEmail(), roles);
             System.out.println("response = " + response);
             System.out.println("authentication.isAuth = " + authentication.isAuthenticated());
             System.out.println("authentication.getAuth = " + authentication.getAuthorities());
             return response;
+        } else {
+            throw new InsufficientAuthenticationException("Not authenticated");
         }
-        return new UserInfoResponse(null,null, null, null);
+
     }
 }

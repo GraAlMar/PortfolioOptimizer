@@ -7,6 +7,7 @@ import com.example.myproj4.services.AssetService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,34 +28,19 @@ public class FinancialDataController {
 
     @GetMapping("/explore")
     public List<Asset> getFinancialData(@RequestParam String searchString, Authentication authSymbolSearch) {
-        System.out.println("authSymbolSearch = " + authSymbolSearch);
-        System.out.println("searchStringSymbolSearch = " + searchString);
-
-        /*var asset = assetService.checkIfAlreadyInDB(searchString, searchString) ? assetService.findByNameOrSymbol(searchString, searchString) : alphaVantageApiService.getFinancialData(searchString);
-
-        assetService.save(asset);*/
-
+        System.out.println("searchString= " + searchString);
         return assetService.search(searchString);
     }
-
-    @GetMapping("/exploreBySymbol")
-    public Asset getFinancialDataBySymbol(@RequestParam String searchString, Authentication authSymbolSearch) {
-        System.out.println("authSymbolSearch = " + authSymbolSearch);
-        System.out.println("searchStringSymbolSearch = " + searchString);
-
-        /*var asset = assetService.checkIfAlreadyInDB(searchString, searchString) ? assetService.findByNameOrSymbol(searchString, searchString) : alphaVantageApiService.getFinancialData(searchString);
-
-        assetService.save(asset);*/
-
-        return assetService.searchBySymbol(searchString);
+    @GetMapping("/sharpeRatioData")
+    public List<String> getLast10DaysPrices(@RequestParam String assetSymbol) {
+        System.out.println("assetSymbol = " + assetSymbol);
+        return alphaVantageApiService.getAdjustedClosePrices(assetSymbol);
     }
-    @GetMapping("/exploreByName")
-    public List<Asset> getFinancialDataByName(@RequestParam String searchString, Authentication authNameSearch) {
-        System.out.println("searchStringNameSearch = " + searchString);
-        System.out.println("authNameSearch = " + authNameSearch);
 
-        return assetService.searchByName(searchString);
+    @GetMapping("/sharpeRatioDataTY")
+    public Object getTreasuryYield() {
 
+        return alphaVantageApiService.getTreasuryYield();
     }
 
 }

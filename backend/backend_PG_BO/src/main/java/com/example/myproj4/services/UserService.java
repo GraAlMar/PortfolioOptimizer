@@ -63,4 +63,10 @@ public class UserService {
         System.out.println("userToChange = " + userToChange);
         return userRepository.save(userToChange);
     }
+
+    public void delete(Long userid) {
+        //var user = userRepository.findById(userid).get();
+        //userRepository.delete(user);
+        userRepository.deleteById(userid);
+    }
 }
