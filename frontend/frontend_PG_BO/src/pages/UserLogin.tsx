@@ -5,7 +5,7 @@ import UserLoginForm from '../components/UserLoginForm';
 import { User } from "../data/UserType";
 import { useNavigate } from "react-router-dom";
 
-import {useUserContext} from "../UserContext.tsx";
+import {useAppContext} from "../AppContext.tsx";
 //import {authenticate} from "../ApiComm.tsx";
 
 const fetchSession = (): Promise<Response> => {
@@ -35,7 +35,7 @@ const loginUser = (user: User) => {
 
 const UserLogin: React.FC = () => {
     //const [user,setUser] = useState<User>()
-    const {user, setUser} = useUserContext();
+    const {user, setUser} = useAppContext();
     console.log("user at initial render of LoginPage: " + user)
     const navigate = useNavigate();
 

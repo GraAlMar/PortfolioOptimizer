@@ -1,28 +1,32 @@
-import React, {createContext, useContext,  ReactNode, useState} from "react";
+import React, {createContext, useContext, ReactNode, useState, Context} from "react";
 import {User} from "./data/UserType.tsx";
+import {Asset} from "./data/AssetType.tsx";
 
-type UserContextType = {
-    user: User;
-    setUser: React.Dispatch<React.SetStateAction<User>> | ((user: User) => void);
+type AppContextType = {
+    user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>> | ((user: User | null) => void);
+    language: string;
+    setLanguage: React.Dispatch<React.SetStateAction<string>>;
+    shortList: Asset[] | [];
+    setShortList: React.Dispatch<React.SetStateAction<Asset[]>>;
+
 };
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
-//const emptyUser: User = {username: ""}
-
-
-const UserContext = createContext<UserContextType | undefined>(undefined);
-
-type UserProviderProps = {
+type AppProviderProps = {
     children: ReactNode;
 }
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<User>(null);
+export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
+    const [user, setUser] = useState<User |  null>(null);
+    const [language, setLanguage] = useState("German")
+    const [shortList,setShortList] = useState<Asset[]>([])
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <AppContext.Provider value={{ user, setUser ,language,setLanguage, shortList, setShortList}}>
             {children}
-        </UserContext.Provider>
+        </AppContext.Provider>
     );
 };
 
-export const useUserContext = () => useContext(UserContext);
+export const useAppContext = () => useContext<AppContextType>(AppContext  as Context<AppContextType>);

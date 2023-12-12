@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "./UserFormStyle.module.css"
+import styles from "./Style.module.css"
 //console.log(styles)
 
 import { User } from "../data/UserType";

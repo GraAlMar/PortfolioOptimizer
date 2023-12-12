@@ -3,7 +3,7 @@ import {NavLink} from "react-router-dom";
 //import {Link, NavLink, Outlet} from "react-router-dom";
 
 import styles from "./UserSpace.module.css"
-import {useUserContext} from "../UserContext.tsx";
+import {useAppContext} from "../AppContext.tsx";
 //import {Outlet} from "@mui/icons-material";
 
 const NavBar = () => {
@@ -25,7 +25,7 @@ const NavBar = () => {
     );
 };
 const UserSpace: React.FC = () => {
-    const {user} = useUserContext()
+    const {user} = useAppContext()
 
     return (
         <>

@@ -1,7 +1,9 @@
 import React from "react";
-import { InstantSearchBarProps } from "../data/InstantSearchBarProps";
 
 
+interface InstantSearchBarProps {
+    handleChange: (e: React.ChangeEvent) => void
+}
 const InstantSearchBar: React.FC<InstantSearchBarProps> = ({ handleChange }) => (
     <div>Search by name:
       <input placeholder="search" onChange={handleChange} />

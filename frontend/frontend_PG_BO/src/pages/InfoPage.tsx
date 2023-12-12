@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useUserContext} from "../UserContext.tsx";
+import {useAppContext} from "../AppContext.tsx";
 
 
 const fetchSession = (): Promise<Response> => {
@@ -13,7 +13,7 @@ const fetchSession = (): Promise<Response> => {
 
 
 const InfoPage: React.FC = () => {
-    const {user, setUser} = useUserContext()
+    const {user, setUser} = useAppContext()
 
     const checkSession = () => {
         fetchSession()

@@ -27,14 +27,18 @@ export const text1 = [
 export const images = [
     {
         src: 'https://www.investopedia.com/thmb/6zYCE0hDjM4bmjUKWwlE1bHh3Jc=/400x300/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1128046391-116b4b2db7fe4b5bbc96a0c8d6fb2dd0.jpg',
-        alt: 'Ein Bild von einem Berg'
+        alt: ''
     },
     {
-        src: "../assets/beta1.png",
-        alt: 'Ein Bild von einem See'
+        src: "src/assets/beta1.png",
+        alt: ''
     },
     {
-        src: '../assets/beta2.png',
-        alt: 'Ein Bild von einem Wald'
+        src: 'src/assets/beta1a.png',
+        alt: ''
+    },
+    {
+        src: "https://www.investopedia.com/thmb/_Y7CbjhZc2qnYYkh06r3rjQzYE8=/400x300/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/business_building_153697270-5bfc2b9846e0fb0083c07d69.jpg",
+        alt: "financial district facade"
     }
     ]

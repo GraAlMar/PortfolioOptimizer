@@ -1,7 +1,7 @@
 import React from "react";
 import { User } from "../data/UserType";
 import { useState } from "react";
-import styles from "./UserFormStyle.module.css"
+import styles from "./Style.module.css"
 
 interface UserRegistrationFormProps {
   user?: User;

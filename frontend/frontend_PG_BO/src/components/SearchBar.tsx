@@ -1,6 +1,12 @@
 import { useState } from "react";
 import React from "react";
-import { SearchBarProps } from "../data/SearchBarProps";
+
+
+export interface SearchBarProps {
+    searchTerm: string;
+    onSaveSearchTerm: (searchTerm: string) => void;
+    title: string;
+}
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm, title }) => {
     const [searchInput, setSearchInput] = useState(searchTerm);

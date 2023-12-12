@@ -1,9 +1,11 @@
 import React from "react";
+import {User} from "../data/UserType.tsx";
+import IconButton from "@mui/material/IconButton";
 
-const UserListItem: React.FC = (item) => {
+const UserListItem: React.FC = (item: User) => {
     return (item ?
-        <tr key={item.name}>
-            <td>{item.name}</td>
+        <tr key={item.id}>
+            <td>{item.username}</td>
             <td>{}</td>
             <td>{}</td>
                 
