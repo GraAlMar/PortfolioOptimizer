@@ -28,8 +28,8 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({user, onSave
       return (
         <form className={styles.UserForm} onSubmit={onSubmit}>
           <div className={styles.control}>
-            <label htmlFor="name">Username:</label>
-            <input
+            <label className={styles.label} htmlFor="name">Username:</label>
+            <input className={styles.input}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               name="name"
@@ -38,8 +38,8 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({user, onSave
           </div>
     
           <div className={styles.control}>
-            <label htmlFor="email">Email:</label>
-            <input
+            <label className={styles.label} htmlFor="email">Email:</label>
+            <input className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               name="email"
@@ -48,8 +48,8 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({user, onSave
           </div>
     
           <div className={styles.control}>
-            <label htmlFor="password">Password:</label>
-            <input
+            <label className={styles.label} htmlFor="password">Password:</label>
+            <input className={styles.input}
               value={userpassword}
               onChange={(e) => setUserpassword(e.target.value)}
               name="password"
@@ -58,11 +58,11 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({user, onSave
           </div>
     
           <div className={styles.buttons}>
-            <button type="submit">
+            <button className={styles.button} type="submit">
               {user ? "Update Data" : "Create Account"}
             </button>
     
-            <button type="button" onClick={onCancel}>
+            <button className={styles.button} type="button" onClick={onCancel}>
               Cancel
             </button>
           </div>

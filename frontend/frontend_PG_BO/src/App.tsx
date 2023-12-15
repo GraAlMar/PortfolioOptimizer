@@ -7,6 +7,7 @@ import UserRegistration from './pages/UserRegistration';
 import Functionality from './pages/Functionality';
 import AdminSpace from './pages/AdminSpace';
 import InfoPage from './pages/InfoPage';
+import styles from "./Styles.module.css"
 
 import Portfolios from "./pages/Portfolios.tsx";
 
@@ -56,7 +57,7 @@ const App: React.FC = () => {
 
 
   return (
-      <div>
+      <div className={styles.divContainer}>
 
         <Router>
           <Navigation/>

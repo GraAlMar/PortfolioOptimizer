@@ -5,7 +5,6 @@ interface AssetDetailsLineProps {
     beta: number;
     sharpeRatio: number ;
     amount: number;
-
     handleAmountChange: (value: number) => void;
 }
 
@@ -31,6 +30,7 @@ const AssetDetailsLine: React.FC<AssetDetailsLineProps> = ({
             />
             <TextField
                 label="Amount in USD"
+
                 type="number"
                 value={amount}
                 onChange={(e) => handleAmountChange(parseFloat(e.target.value))}

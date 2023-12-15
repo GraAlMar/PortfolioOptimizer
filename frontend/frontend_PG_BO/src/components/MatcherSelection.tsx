@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Typography from "@mui/material/Typography";
 import {MenuItem, Select} from "@mui/material";
 import {Asset} from "../data/AssetType.tsx";
@@ -10,8 +10,6 @@ interface MatcherSelectionProps {
 }
 
 const MatcherSelection: React.FC<MatcherSelectionProps> = ({ matcher, matchers, onSelectChange}) => {
-    //const [chosen, setChosen] = useState<string>()
-    //console.log(chosen)
 
     return (
         <div>
@@ -34,7 +32,7 @@ const MatcherSelection: React.FC<MatcherSelectionProps> = ({ matcher, matchers, 
                         {asset.name}
                     </MenuItem>
                 ))}
-                {matcher ? <MenuItem value="" disabled>Change Matcher</MenuItem> : null}
+                {matcher ? <MenuItem value="" disabled></MenuItem> : null}
             </Select>
         </div>
     );

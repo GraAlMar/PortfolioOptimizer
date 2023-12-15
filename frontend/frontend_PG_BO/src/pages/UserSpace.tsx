@@ -30,7 +30,7 @@ const UserSpace: React.FC = () => {
     return (
         <>
             <div><p>       </p></div>
-        <div>
+        <div className={styles.divContainer}>
 
             <NavBar/>
             {/*<nav>

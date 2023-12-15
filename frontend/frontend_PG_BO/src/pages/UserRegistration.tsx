@@ -34,8 +34,10 @@ const UserRegistration: React.FC = () => {
 
     return (
         <div>
+            <div><p>   </p></div>
+            <div><p>   </p></div>
             <UserRegistrationForm
-                
+
                 onCancel={() => navigate("/")}
                 onSave={handleCreateUser}
             />

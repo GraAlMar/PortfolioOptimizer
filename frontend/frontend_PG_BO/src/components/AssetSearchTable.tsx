@@ -7,6 +7,7 @@ import {green, blue} from '@mui/material/colors'
 import Button from "@mui/material/Button";
 
 
+
 const greenTheme = createTheme({ palette: { primary: green } })
 const blueTheme = createTheme({ palette: { primary: blue } })
 interface AssetSearchTableProps {
@@ -20,6 +21,8 @@ const AssetSearchTable: React.FC<AssetSearchTableProps> = ({assets, onSetAsMain,
         {field: "name", headerName: "Name", width: 200},
         {field: "abbreviation", headerName: "Symbol", width: 200},
         {field: "beta", headerName: "Beta", width: 150},
+        {field: "sharperatio", headerName: "Sharpe Ratio", width: 150,
+            valueFormatter: (params: { value: number; }) => params.value ? params.value.toFixed(2) : null},
         {field: "price", headerName: "Price", width: 150},
         {field: "id1",
         headerName: "",

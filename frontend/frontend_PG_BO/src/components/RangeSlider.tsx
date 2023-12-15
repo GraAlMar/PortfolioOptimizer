@@ -1,26 +1,3 @@
-/*import React from 'react';
-import Typography from "@mui/material/Typography";
-import {Slider} from "@mui/material";
-
-interface SliderProps {
-    min: number;
-    max: number;
-    onChange: (event: any , newValue: number | number[]) => void;
-}
-
-const RangeSlider: React.FC<SliderProps> = ({ min, max, onChange }) => {
-    return (
-        <div>
-            <Typography variant="caption">{min}</Typography>
-            <Slider valueLabelDisplay="auto" min={min} max={max} onChange={onChange} />
-            <Typography variant="caption">{max}</Typography>
-        </div>
-    );
-};
-
-export default RangeSlider;*/
-
-
 import React from 'react';
 import Typography from "@mui/material/Typography";
 import { Slider, styled } from "@mui/material";
@@ -28,7 +5,9 @@ import { Slider, styled } from "@mui/material";
 interface SliderProps {
     min: number;
     max: number;
-    onChange: (event: any , newValue: number | number[]) => void;
+    value: number;
+    step: number;
+    onChange: (newValue: number) => void;
 }
 
 const RangeSliderContainer = styled('div')({
@@ -47,13 +26,23 @@ const StyledSlider = styled(Slider)({
     marginRight: '20px',
 });
 
-const RangeSlider: React.FC<SliderProps> = ({ min, max, onChange }) => {
+const RangeSlider: React.FC<SliderProps> = ({ min, max, value, onChange ,step}) => {
+    const handleSliderChange = (_event: Event, newValue: number | number[]) => {
+        if (typeof newValue === 'number') {
+            onChange(newValue);
+        }
+    };
     return (
         <RangeSliderContainer>
             <MinMaxContainer>
                 <Typography variant="caption">{min}</Typography>
             </MinMaxContainer>
-            <StyledSlider valueLabelDisplay="auto" min={min} max={max} onChange={onChange} />
+            <StyledSlider value={value}
+            min={min}
+            max={max}
+                          step={step}
+            onChange={handleSliderChange}
+            valueLabelDisplay="auto" />
             <MinMaxContainer>
                 <Typography variant="caption">{max}</Typography>
             </MinMaxContainer>
@@ -62,5 +51,3 @@ const RangeSlider: React.FC<SliderProps> = ({ min, max, onChange }) => {
 };
 
 export default RangeSlider;
-
-

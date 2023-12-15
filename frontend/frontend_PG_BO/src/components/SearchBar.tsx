@@ -1,15 +1,15 @@
 import { useState } from "react";
 import React from "react";
+import styles from "./Style.module.css"
 
 
 export interface SearchBarProps {
-    searchTerm: string;
     onSaveSearchTerm: (searchTerm: string) => void;
     title: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm, title }) => {
-    const [searchInput, setSearchInput] = useState(searchTerm);
+const SearchBar: React.FC<SearchBarProps> = ({  onSaveSearchTerm, title }) => {
+    const [searchInput, setSearchInput] = useState("");
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,9 +22,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm, tit
     return (
         <form className="SearchForm" onSubmit={onSubmit}>
       <div className="control">
-        <label htmlFor="search">Search by {title}:</label>
-        <input
-          value={searchTerm}
+        <label className={styles.label} htmlFor="search">Search by {title}:</label>
+        <input className={styles.input}
+          value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           name="name"
           id="name"
@@ -32,7 +32,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSaveSearchTerm, tit
       </div>
  
       <div className="buttons">
-        <button type="submit" >
+        <button className={styles.button} type="submit" >
           Submit
         </button>
 
