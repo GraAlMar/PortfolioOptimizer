@@ -1,7 +1,8 @@
-package com.example.myproj4.security.services;
+package com.example.myproj4.services;
 
 import com.example.myproj4.models.User;
 import com.example.myproj4.repositories.UserRepository;
+import com.example.myproj4.services.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

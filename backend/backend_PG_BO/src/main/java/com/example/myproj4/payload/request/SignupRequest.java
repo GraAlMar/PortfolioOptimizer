@@ -1,4 +1,4 @@
-package com.example.myproj4.security.payload.request;
+package com.example.myproj4.payload.request;
 
 import jakarta.persistence.Column;
 

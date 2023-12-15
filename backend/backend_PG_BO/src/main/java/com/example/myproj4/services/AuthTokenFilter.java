@@ -1,6 +1,5 @@
-package com.example.myproj4.security.jwt;
+package com.example.myproj4.services;
 
-import com.example.myproj4.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

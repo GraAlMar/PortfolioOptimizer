@@ -11,17 +11,30 @@ public class Investment {
     private Long id;
     @ManyToOne
     private Asset asset;
-    @ManyToOne
-    private Portfolio portfolio;
+
     private BigDecimal amount;
 
+    @ManyToOne
+    @JoinColumn(name = "portfolioId")
+    private Portfolio portfolio;
+
+
+    public Investment(Asset asset, BigDecimal amount) {
+        this.asset = asset;
+        this.amount = amount;
+    }
+
+    public Investment() {
+
+    }
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
     public Asset getAsset() {
         return asset;
     }
 
-    public Portfolio getPortfolio() {
-        return portfolio;
-    }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -39,11 +52,18 @@ public class Investment {
         this.asset = asset;
     }
 
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
-    }
+
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Investment{" +
+                "id=" + id +
+                ", asset=" + asset +
+                ", amount=" + amount +
+                '}';
     }
 }

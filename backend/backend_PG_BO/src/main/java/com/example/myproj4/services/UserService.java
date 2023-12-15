@@ -4,7 +4,7 @@ import com.example.myproj4.models.User;
 import com.example.myproj4.repositories.AssetRepository;
 import com.example.myproj4.repositories.RoleRepository;
 import com.example.myproj4.repositories.UserRepository;
-import com.example.myproj4.security.payload.request.SignupRequest;
+import com.example.myproj4.payload.request.SignupRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class UserService {
     public boolean existsByEmail() {return userRepository.existsByEmail();}*/
     public User save(User user) {
         user.addRole(roleRepository.findByName(ROLE_USER));
-        System.out.println("user from service= " + user);
+        //System.out.println("user from service= " + user);
         return userRepository.save(user);
     }
     public User register(SignupRequest signupData) {
@@ -48,10 +48,10 @@ public class UserService {
 
     public User addMain(Long userid, String assetSymbol) {
         var asset = assetRepository.findByAbbreviationContainsIgnoreCase(assetSymbol);
-        System.out.println("asset = " + asset);
+        //System.out.println("asset = " + asset);
         User userToChange = userRepository.findById(userid).get();
         userToChange.setMainAsset(asset);
-        System.out.println("userToChange = " + userToChange);
+        //System.out.println("userToChange = " + userToChange);
 
         return userRepository.save(userToChange);
     }
@@ -60,7 +60,7 @@ public class UserService {
         var asset = assetRepository.findByAbbreviationContainsIgnoreCase(assetSymbol);
         User userToChange = userRepository.findById(userid).get();
         userToChange.addToShortList(asset);
-        System.out.println("userToChange = " + userToChange);
+        //System.out.println("userToChange = " + userToChange);
         return userRepository.save(userToChange);
     }
 

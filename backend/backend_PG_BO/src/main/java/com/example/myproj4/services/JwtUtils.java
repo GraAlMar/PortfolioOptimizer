@@ -1,6 +1,5 @@
-package com.example.myproj4.security.jwt;
+package com.example.myproj4.services;
 
-import com.example.myproj4.security.services.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

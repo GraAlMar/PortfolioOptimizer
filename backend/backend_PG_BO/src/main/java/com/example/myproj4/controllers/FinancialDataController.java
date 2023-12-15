@@ -7,10 +7,7 @@ import com.example.myproj4.services.AssetService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -32,15 +29,18 @@ public class FinancialDataController {
         return assetService.search(searchString);
     }
     @GetMapping("/sharpeRatioData")
-    public List<String> getLast10DaysPrices(@RequestParam String assetSymbol) {
+    public List<Double> getLast10DaysPrices(@RequestParam String assetSymbol) {
         System.out.println("assetSymbol = " + assetSymbol);
-        return alphaVantageApiService.getAdjustedClosePrices(assetSymbol);
+        return alphaVantageApiService.getAdjustedReturnsFromClosePrices(assetSymbol);
     }
-
+    @GetMapping("/sharpeRatio")
+    public Double getSharpeRatio(@RequestParam String assetSymbol) {
+        return alphaVantageApiService.calculateSharpeRatio(assetSymbol);
+    }
     @GetMapping("/sharpeRatioDataTY")
     public Object getTreasuryYield() {
 
-        return alphaVantageApiService.getTreasuryYield();
+        return alphaVantageApiService.getTreasuryYields();
     }
 
 }

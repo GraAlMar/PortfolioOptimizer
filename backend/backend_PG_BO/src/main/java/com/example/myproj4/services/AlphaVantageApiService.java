@@ -13,13 +13,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @EnableScheduling
 @Service
@@ -45,6 +42,10 @@ public class AlphaVantageApiService {
         this.assetRepository = assetRepository;
     }
     public Asset getFinancialData(String symbolSearchString) {
+        //var sharpeRatio = (Math.round(calculateSharpeRatio(symbolSearchString)*100.0))/100.0;
+        var sharpeRatio = calculateSharpeRatio(symbolSearchString);
+
+        //System.out.println("sharpeRatio = " + sharpeRatio);
         WebClient webClient = webClientBuilder.build();
         String apiUrl = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + symbolSearchString + "&apikey=" + alphaVantageApiKey;
         return webClient.get()
@@ -57,6 +58,7 @@ public class AlphaVantageApiService {
                     asset.setType(alphaVantageAsset.getAssetType());
                     asset.setName(alphaVantageAsset.getAssetName());
                     asset.setBeta(alphaVantageAsset.getBeta());
+                    asset.setSharperatio(sharpeRatio);
                     asset.setPrice(alphaVantageAsset.getAvPrice());
                     return asset;
                 }).block();
@@ -86,7 +88,6 @@ public class AlphaVantageApiService {
         }
         return new ArrayList<>();
     }
-
     public List<String> extractSymbolsFromApiResponse(String apiResponse) throws JsonProcessingException {
         System.out.println("apiResponse = " + apiResponse);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -102,12 +103,33 @@ public class AlphaVantageApiService {
                 .collect(Collectors.toList());
 
     }
+    @Scheduled(cron = "@hourly") //bzw. (cron="0 0 * * * *")
+    public void updateAlphaVantageData(){
+        List<Asset> assets = assetRepository.findAll();
+        var updatedAssets = assets.stream().map(asset -> {
+            var newAsset = getFinancialData(asset.getAbbreviation());
+            newAsset.setId(asset.getId());
+            return newAsset;
+        }).collect(Collectors.toList());
+        assetRepository.saveAll(updatedAssets);
+    }
 
-    public List<String> getAdjustedClosePrices(String assetSymbol) {
+    //SHARPE RATIO HELPER METHODS
+    public Double calculateSharpeRatio(String symbol){
+        var meanOfStockReturns = calculateMean(getAdjustedReturnsFromClosePrices(symbol));
+        //System.out.println("meanOfStockReturns = " + meanOfStockReturns);
+        var meanOfTreasuryYields = calculateMean(getTreasuryYields());
+        //System.out.println("meanOfTreasuryYields = " + meanOfTreasuryYields);
+        var standDevOfStockReturns = calculateStandDev(getAdjustedReturnsFromClosePrices(symbol), meanOfStockReturns);
+        //System.out.println("standDevOfStockReturns = " + standDevOfStockReturns);
+        return (meanOfStockReturns - meanOfTreasuryYields)/ standDevOfStockReturns;
+    }
+
+    public List<Double> getAdjustedReturnsFromClosePrices(String assetSymbol) {
         WebClient webClient = webClientBuilder.build();
         var apiPart = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";
         String apiUrl = apiPart + assetSymbol + "&outputsize=compact&apikey=" + alphaVantageApiKey;
-        System.out.println("apiUrl = " + apiUrl);
+        //System.out.println("apiUrl = " + apiUrl);
 
         if (assetSymbol != "") {
             var prices = webClient.get()
@@ -115,7 +137,7 @@ public class AlphaVantageApiService {
                     .retrieve()
                     .bodyToMono(String.class)
                     .map(response -> {
-                        System.out.println("response = " + response);
+                        //System.out.println("response = " + response);
                         try {
                             return extractAdjustedClosePriceFromApiResponse(response);
                         } catch (JsonProcessingException e) {
@@ -123,19 +145,34 @@ public class AlphaVantageApiService {
                         }
                     })
                     .block();
-            System.out.println("prices = " + prices);
-            return prices;
+            //System.out.println("prices = " + prices);
+            var pricesAsDoubles = fillMissingValues(prices);
+            //System.out.println("pricesAsDoubles = " + pricesAsDoubles);
+            var stockReturns = getAnnReturnsOfLast10Days(pricesAsDoubles);
+            //System.out.println("stockReturns = " + stockReturns);
+            return stockReturns;
         }
         return new ArrayList<>();
 
     }
+
+    private List<Double> getAnnReturnsOfLast10Days(List<Double> pricesAsDoubles) {
+        List<Double> returns = new ArrayList<>();
+        for (int i = 0; i < pricesAsDoubles.size() -1; i++) {
+            Double oneOfReturns = (pricesAsDoubles.get(i) - pricesAsDoubles.get(i + 1))/ pricesAsDoubles.get(i + 1);
+            Double annualOneOfReturns = Math.pow((1.0 + oneOfReturns),(365.0)) - 1.0;
+            returns.add(annualOneOfReturns);
+        }
+        return returns;
+    }
+
     public List<String> extractAdjustedClosePriceFromApiResponse(String apiResponse) throws JsonProcessingException {
-        System.out.println("apiResponse = " + apiResponse);
+        //System.out.println("apiResponse = " + apiResponse);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> responseMap = objectMapper.readValue(apiResponse, new TypeReference<Map<String, Object>>() {});
-        System.out.println("responseMap = " + responseMap);
+        //System.out.println("responseMap = " + responseMap);
         Map<String, Map<String,String>> timeSeriesDaily = (Map<String, Map<String,String>>) responseMap.get("Time Series (Daily)");
-        System.out.println("timeSeriesDaily = " + timeSeriesDaily);
+        //System.out.println("timeSeriesDaily = " + timeSeriesDaily);
 
         List<String> adjustedCloseValues = new ArrayList<>();
 
@@ -153,11 +190,11 @@ public class AlphaVantageApiService {
             count++;
         }
 
-        System.out.println("Adjusted Close Values: " + adjustedCloseValues);
+        //System.out.println("Adjusted Close Values: " + adjustedCloseValues);
         return adjustedCloseValues;
     }
 
-    public List<Double> getTreasuryYield() {
+    public List<Double> getTreasuryYields() {
         WebClient webClient = webClientBuilder.build();
 
         String apiUrl = "https://www.alphavantage.co/query?function=TREASURY_YIELD&interval=daily&maturity=10year&apikey=" + alphaVantageApiKey;
@@ -166,7 +203,7 @@ public class AlphaVantageApiService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(response -> {
-                    System.out.println("response = " + response);
+                    //System.out.println("response = " + response);
                     try {
                         return extractTreasuryYieldsFromApiResponse(response);
                     } catch (JsonProcessingException e) {
@@ -174,17 +211,17 @@ public class AlphaVantageApiService {
                     }
                 })
                 .block();
-        System.out.println("treasuryYields = " + treasuryYields);
+        //System.out.println("treasuryYields = " + treasuryYields);
         return treasuryYields;
     }
 
     public List<Double> extractTreasuryYieldsFromApiResponse(String apiResponse) throws JsonProcessingException {
-        System.out.println("apiResponse = " + apiResponse);
+        //System.out.println("apiResponse = " + apiResponse);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> responseMap = objectMapper.readValue(apiResponse, new TypeReference<Map<String, Object>>() {});
-        System.out.println("responseMap = " + responseMap);
+        //System.out.println("responseMap = " + responseMap);
         List<Map<String,String>> dayYields = (List<Map<String, String>>) responseMap.get("data");
-        System.out.println("dayYields = " + dayYields);
+        //System.out.println("dayYields = " + dayYields);
 
         List<String> treasuryYields = new ArrayList<>();
 
@@ -193,12 +230,12 @@ public class AlphaVantageApiService {
                 treasuryYields.add(dayYields.get(i).get("value"));
             }
         }
-        System.out.println("treasuryYields = " + treasuryYields);
+        //System.out.println("treasuryYields = " + treasuryYields);
         var treasuryYieldsAsDoubles = fillMissingValues(treasuryYields);
         return treasuryYieldsAsDoubles;
     }
 
-    public static List<Double> fillMissingValues(List<String> lst) {
+    public List<Double> fillMissingValues(List<String> lst) {
         if (lst.contains(".")) {
             List<Double> doubleList = new ArrayList<>();
             for (String s : lst) {
@@ -228,19 +265,25 @@ public class AlphaVantageApiService {
             return lst.stream().map(Double::parseDouble).collect(Collectors.toList());
         }
     }
-
-    @Scheduled(cron = "@hourly") //bzw. (cron="0 0 * * * *")
-    public void updateAlphaVantageData(){
-        List<Asset> assets = assetRepository.findAll();
-        var updatedAssets = assets.stream().map(asset -> {
-            var newAsset = getFinancialData(asset.getAbbreviation());
-            newAsset.setId(asset.getId());
-            return newAsset;
-        }).collect(Collectors.toList());
-        assetRepository.saveAll(updatedAssets);
+    public Double calculateMean(List<Double> last10DaysValues) {
+        return last10DaysValues.stream()
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .getAsDouble();
+    }
+    public Double calculateStandDev(List<Double> last10DaysValues, Double mean) {
+        var squares = last10DaysValues.stream()
+                .map(item -> Math.pow((item - mean),2.0))
+                .mapToDouble(Double::doubleValue)
+                .sum();
+        var standDev = Math.sqrt(squares/(last10DaysValues.size()));
+        //System.out.println("standDev = " + standDev);
+        return standDev;
     }
 
 
+
+    //=================================================
     public AlphaVantageAsset getAlphaVantageAssetToStore(String searchString) {
         WebClient webClient = webClientBuilder.build();
 
@@ -251,8 +294,6 @@ public class AlphaVantageApiService {
                 .retrieve()
                 .bodyToMono(AlphaVantageAsset.class).block();
     }
-
-
     public List<AlphaVantageAsset> findAll(){
         return alphaVantageAPIRepository.findAll();
     }

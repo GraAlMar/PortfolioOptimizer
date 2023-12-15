@@ -1,12 +1,12 @@
-package com.example.myproj4.security.controllers;
+package com.example.myproj4.controllers;
 
 import com.example.myproj4.repositories.UserRepository;
-import com.example.myproj4.security.jwt.JwtUtils;
-import com.example.myproj4.security.payload.request.LoginRequest;
-import com.example.myproj4.security.payload.request.SignupRequest;
-import com.example.myproj4.security.payload.response.MessageResponse;
-import com.example.myproj4.security.payload.response.UserInfoResponse;
-import com.example.myproj4.security.services.UserDetailsImpl;
+import com.example.myproj4.services.JwtUtils;
+import com.example.myproj4.payload.request.LoginRequest;
+import com.example.myproj4.payload.request.SignupRequest;
+import com.example.myproj4.payload.response.MessageResponse;
+import com.example.myproj4.payload.response.UserInfoResponse;
+import com.example.myproj4.services.UserDetailsImpl;
 import com.example.myproj4.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;

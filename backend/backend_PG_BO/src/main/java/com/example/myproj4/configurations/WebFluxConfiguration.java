@@ -1,4 +1,4 @@
-package com.example.myproj4;
+package com.example.myproj4.configurations;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.ServerCodecConfigurer;

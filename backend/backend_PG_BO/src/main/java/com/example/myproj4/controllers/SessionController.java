@@ -1,11 +1,9 @@
-package com.example.myproj4.security.controllers;
+package com.example.myproj4.controllers;
 
 import com.example.myproj4.models.User;
-import com.example.myproj4.security.jwt.AuthTokenFilter;
-import com.example.myproj4.security.jwt.JwtUtils;
-import com.example.myproj4.security.payload.response.UserInfoResponse;
+import com.example.myproj4.services.AuthTokenFilter;
+import com.example.myproj4.services.JwtUtils;
 import com.example.myproj4.services.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
@@ -13,9 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController

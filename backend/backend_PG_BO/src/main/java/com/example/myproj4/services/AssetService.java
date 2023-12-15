@@ -40,7 +40,13 @@ public class AssetService {
         return assetRepository.existsByAbbreviationContainsIgnoreCaseOrNameContainsIgnoreCase(symbol, name);};
 
     public List<Asset> search(String searchTerm) {
-       return searchBySymbol(searchTerm) != null ? List.of(searchBySymbol(searchTerm)) : searchByName(searchTerm);
+        try {
+            var symbolSearch = searchBySymbol(searchTerm);
+            return List.of(symbolSearch);
+        } catch (Exception e) {
+            return searchByName(searchTerm);
+        }
+
     }
 
     public List<Asset> searchByName(String name) {
@@ -64,6 +70,7 @@ public class AssetService {
     }
 
     private List<Asset> searchByNameUsingAPI(String name) {
+        System.out.println("name = " + name);
         return alphaVantageApiService.getSymbolsWithSearchByName(name)
                 .stream()
                 .map(symbol -> alphaVantageApiService.getFinancialData(symbol))
