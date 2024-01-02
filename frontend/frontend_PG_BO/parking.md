@@ -1,8 +1,14 @@
 
+if (user !== null && user.mainAsset !== undefined && matcherAsset !== null && matcherAsset.beta !== undefined && matcherAsset.sharperatio !== undefined) {
+sliderValuesSetterFunction(value,user,matcherAsset,setSliderValues)
+}
+
+========================================================
+
 
 ,{method: "GET", credentials: "include",headers: {"Content-Type":"application/json"}}
 ===============================================
-UserContext.tsx:
+AppContext.tsx:
 
 type State = {
 user: undefined | User,
@@ -120,3 +126,10 @@ UserLogin.tsx:
 //const handleChange = (e) => { 
 //	setUserInstantInput(e.target.value);
 //};
+
+==========================
+<div className={styles.buttonContainer}>
+                        <ThemeProvider theme={greyTheme}><Button onClick={handleShowMain}>Show main</Button></ThemeProvider>
+                        <ThemeProvider theme={greyTheme}><Button onClick={handleShowShortList}>Show shortlist</Button></ThemeProvider>
+                        <ThemeProvider theme={greyTheme}><Button onClick={() => setSearchVisible(true)}>Search</Button></ThemeProvider>
+                    </div>)

@@ -1,4 +1,4 @@
-package com.example.myproj4.services;
+package com.example.myproj4.controllers.payload;
 
 import com.example.myproj4.models.Investment;
 

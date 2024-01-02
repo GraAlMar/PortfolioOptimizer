@@ -70,13 +70,14 @@
 .buttonContainer {
     padding: 20px 20px 20px 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
-.divContainer {
+
+/*.divContainer {
     width: 90vw;
     height: 100vh;
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
-}
+}*/

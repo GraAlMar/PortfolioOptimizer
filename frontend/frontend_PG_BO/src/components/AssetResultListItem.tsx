@@ -1,6 +1,7 @@
 import React from "react";
 //import { Link } from "react-router-dom";
 
+
 //import { AssetResultListItemProps } from "../data/AssetResultListItemProps";
 import {Asset} from "../data/AssetType.tsx";
 interface AssetResultListItemProps {
@@ -21,8 +22,7 @@ const AssetResultListItem: React.FC<AssetResultListItemProps> = ({item, onSelect
     return (item ?
         <tr key={item.name}>
             <td>{item.name}</td>
-            <td>{item.assetSymbol}</td>
-            <td>{item.assetBeta}</td>
+
             <td><button type="button" onClick={onSaveAsMain}></button></td>
             <td><button type="button" onClick={onSaveAsMatcher}></button></td>
 

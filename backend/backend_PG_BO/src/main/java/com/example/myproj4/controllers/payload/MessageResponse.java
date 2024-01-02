@@ -1,4 +1,4 @@
-package com.example.myproj4.payload.response;
+package com.example.myproj4.controllers.payload;
 
 public class MessageResponse {
     private String message;

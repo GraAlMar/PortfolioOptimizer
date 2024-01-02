@@ -2,7 +2,7 @@ package com.example.myproj4.runners;
 
 import com.example.myproj4.models.*;
 import com.example.myproj4.repositories.*;
-import com.example.myproj4.payload.request.SignupRequest;
+import com.example.myproj4.controllers.payload.SignupRequest;
 import com.example.myproj4.services.AlphaVantageApiService;
 import com.example.myproj4.services.AssetService;
 import com.example.myproj4.services.UserService;

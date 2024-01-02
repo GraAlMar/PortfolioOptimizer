@@ -13,14 +13,29 @@ interface MainDisplayProps {
 
 const MainDisplay: React.FC<MainDisplayProps> = ({ asset }) => {
     return (
-        <div >
+        <div>
             {asset ? (
-                <div className={styles.divContainer}>
+                /*<div className={styles.divContainer}>
                     <div className={styles.divContainer}><Typography variant="body1">{asset.name}</Typography></div>
                     <div className={styles.divContainer}><Typography variant="body1">{asset.abbreviation}</Typography></div>
                     <div className={styles.divContainer}><Typography variant="body1">{asset.price}</Typography></div>
 
-                </div>
+                </div>*/
+                <>
+                    <div style={{display: "inline-flex", justifyItems: "center", flexDirection: "row"}}>
+                        <div style={{marginRight: "50px"}}><Typography variant="body1">{asset.name}</Typography></div>
+                        <div><p></p></div>
+                        <div style={{marginRight: "50px"}}><Typography variant="body1">{asset.abbreviation}</Typography>
+                        </div>
+                        <div><p></p></div>
+                        <div style={{marginRight: "50px"}}><Typography variant="body1">{asset.price}</Typography></div>
+                        <div><p></p></div>
+
+
+                    </div>
+
+                </>
+
             ) : (
                 <Typography variant="body1">You have not yet chosen a main asset</Typography>
             )}
@@ -30,6 +45,10 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ asset }) => {
                     <HelpIcon />
                 </IconButton>
             </Tooltip>
+
+            {asset && (<div>
+                <p>Please choose amount:</p>
+            </div>)}
 
         </div>
     );

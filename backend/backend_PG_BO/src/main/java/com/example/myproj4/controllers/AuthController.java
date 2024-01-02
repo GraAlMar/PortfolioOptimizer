@@ -2,10 +2,10 @@ package com.example.myproj4.controllers;
 
 import com.example.myproj4.repositories.UserRepository;
 import com.example.myproj4.services.JwtUtils;
-import com.example.myproj4.payload.request.LoginRequest;
-import com.example.myproj4.payload.request.SignupRequest;
-import com.example.myproj4.payload.response.MessageResponse;
-import com.example.myproj4.payload.response.UserInfoResponse;
+import com.example.myproj4.controllers.payload.LoginRequest;
+import com.example.myproj4.controllers.payload.SignupRequest;
+import com.example.myproj4.controllers.payload.MessageResponse;
+import com.example.myproj4.controllers.payload.UserInfoResponse;
 import com.example.myproj4.services.UserDetailsImpl;
 import com.example.myproj4.services.UserService;
 import jakarta.validation.Valid;

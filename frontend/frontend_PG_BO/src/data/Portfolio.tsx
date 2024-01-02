@@ -7,8 +7,8 @@ export interface Portfolio {
     portfolioBeta: number;
     portfolioSharpeRatio: number;
 }
-type Investment = {
+export interface Investment  {
     id?: number;
     asset: Asset;
     amount: number;
-};
+}

@@ -14,12 +14,16 @@ const MatcherSelection: React.FC<MatcherSelectionProps> = ({ matcher, matchers, 
     return (
         <div>
             {matcher ? (
-                <div>
-                    <Typography variant="body1">{matcher.name}</Typography>
-                    <Typography variant="body2">{matcher.abbreviation}</Typography>
-                    <Typography variant="body2">{matcher.price}</Typography>
 
-                    {/* Number fields*/}
+                <div style={{display: "inline-flex", justifyItems: "center", flexDirection: "row"}}>
+                    <div style={{marginRight: "50px"}}><Typography variant="body1">{matcher.name}</Typography></div>
+                    <div><p>      </p></div>
+                    <div style={{marginRight: "50px"}}><Typography variant="body1">{matcher.abbreviation}</Typography></div>
+                    <div><p>      </p></div>
+                    <div style={{marginRight: "50px"}}><Typography variant="body1">{matcher.price}</Typography></div>
+                    <div><p></p></div>
+
+
                 </div>
             ) : (
                 <Typography variant="body1">You haven't yet chosen a matcher</Typography>

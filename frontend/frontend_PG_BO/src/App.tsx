@@ -33,7 +33,7 @@ const fetchSession = (): Promise<Response> => {
 const App: React.FC = () => {
   const {user,setUser} = useAppContext();
 
-  console.log("user: " + user)
+  //console.log("user: " + user)
   const checkSession = () => {
       fetchSession()
           .then(res =>  {

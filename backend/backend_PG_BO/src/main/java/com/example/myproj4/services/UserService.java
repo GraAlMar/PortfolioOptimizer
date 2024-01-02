@@ -4,7 +4,7 @@ import com.example.myproj4.models.User;
 import com.example.myproj4.repositories.AssetRepository;
 import com.example.myproj4.repositories.RoleRepository;
 import com.example.myproj4.repositories.UserRepository;
-import com.example.myproj4.payload.request.SignupRequest;
+import com.example.myproj4.controllers.payload.SignupRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

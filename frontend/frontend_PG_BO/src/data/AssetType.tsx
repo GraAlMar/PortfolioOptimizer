@@ -3,6 +3,6 @@ export interface Asset {
     name: string;
     abbreviation: string;
     beta: number;
-    sharperatio: number | null;
+    sharperatio: number;
     price: number;
 }

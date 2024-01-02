@@ -3,8 +3,8 @@ import {User} from "./data/UserType.tsx";
 import {Asset} from "./data/AssetType.tsx";
 
 type AppContextType = {
-    user: User | null;
-    setUser: React.Dispatch<React.SetStateAction<User | null>> | ((user: User | null) => void);
+    user: User | undefined;
+    setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
     language: string;
     setLanguage: React.Dispatch<React.SetStateAction<string>>;
     shortList: Asset[] | [];
@@ -18,7 +18,7 @@ type AppProviderProps = {
 }
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<User |  null>(null);
+    const [user, setUser] = useState<User |  undefined>(undefined);
     const [language, setLanguage] = useState("German")
     const [shortList,setShortList] = useState<Asset[]>([])
 

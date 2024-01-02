@@ -92,7 +92,7 @@ const Navigation: React.FC = () => {
                     <Typography variant="h5" component="div" sx={{flexGrow: 1} }>
                         PORTFOLIO OPTIMIZER
                     </Typography>
-                    {user !== null ? (
+                    {user !== undefined && user !== null ? (
                         <div>
                             <Button
                                 color="inherit"

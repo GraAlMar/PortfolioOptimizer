@@ -34,16 +34,16 @@ public class SessionController {
 
         if (authentication != null && authentication.isAuthenticated()) {
             String username = authentication.getName();
-            System.out.println("username = " + username);
+            //System.out.println("username = " + username);
             User currentUser = userService.findByName(username);
-            System.out.println("currentUser = " + currentUser);
+            System.out.println("currentUser from checkSession = " + currentUser);
             var response = currentUser;
 
             //var roles = currentUser.getRoles().stream().map(role -> role.getName().toString()).collect(Collectors.toList());
             //var response = new UserInfoResponse(currentUser.getId(), currentUser.getUsername(), currentUser.getEmail(), roles);
-            System.out.println("response = " + response);
-            System.out.println("authentication.isAuth = " + authentication.isAuthenticated());
-            System.out.println("authentication.getAuth = " + authentication.getAuthorities());
+            //System.out.println("response = " + response);
+            //System.out.println("authentication.isAuth = " + authentication.isAuthenticated());
+            //System.out.println("authentication.getAuth = " + authentication.getAuthorities());
             return response;
         } else {
             throw new InsufficientAuthenticationException("Not authenticated");

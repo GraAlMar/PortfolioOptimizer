@@ -4,9 +4,9 @@ const theme = createTheme({
     palette: {
         primary: {
             main: '#1760a5',
-            light: 'skyblue',
+            light: '#1760a5',
         },
-        secondary: { main: '#a0a0a3' },
+        secondary: { main: 'rgb(194,195,198)' },
         otherColor: { main: '#999898' },
     },
 });

@@ -51,7 +51,7 @@ const checkSession = (stateSetter: React.Dispatch<SetStateAction<User | null>> |
             return null;
         })
         .then(data => {console.log("checkSession-setUser: " + data), stateSetter(data)})
-    //console.log("initial render user: " + user)
+    console.log()
 };
 const fetchAssets = (stateSetter: React.Dispatch<React.SetStateAction<Asset[]>>, stateSetter2: React.Dispatch<React.SetStateAction<boolean>>, queryParams: string): Promise<void> => {
     const urlSearchParams = new URLSearchParams();
@@ -106,7 +106,7 @@ async function fetchDeleteShortListAsset(userId: number, asset: Asset, stateSett
 }
 const StyledButton = styled(Button) (({ theme }) => ({
     marginLeft: '10px',
-    marginRight: '10px',
+    marginRight: '50px',
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.secondary.main,
 }));
@@ -129,7 +129,7 @@ const UserAssetsPage: React.FC = () => {
     const [loading,setLoading] = useState(false)
     //let mainAssetRender : Asset[] = main !== undefined ? [main] : []
     //console.log(mainAssetRender[0].name)
-    console.log("user: " + user)
+    console.info(user)
 
     function handleShowMain() {
         setMainVisible(true)
@@ -185,7 +185,7 @@ const UserAssetsPage: React.FC = () => {
         }
     };
     const theme = useTheme();
-    console.log(theme)
+    //console.log(theme)
     return (
         <>
         <div >
