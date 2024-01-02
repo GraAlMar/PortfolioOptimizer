@@ -1,1 +1,1 @@
-# ProjG_BO
+# PortfolioOptimizer
